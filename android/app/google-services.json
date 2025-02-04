@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658334612091",
+    "project_id": "artlog-app-72ff1",
+    "storage_bucket": "artlog-app-72ff1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658334612091:android:d67a698b48ca7dea5c00de",
+        "android_client_info": {
+          "package_name": "com.example.artlog_app_mvp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT3xWyGXdSiKDiPd4ZWlwfHWSkarq4PHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
