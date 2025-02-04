@@ -1,8 +1,14 @@
+import 'package:artlog_app_mvp/firebase_options.dart';
 import 'package:artlog_app_mvp/ui/pages/login/login_page.dart';
 import 'package:artlog_app_mvp/ui/pages/splash/splash_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // 파이어베이스 초기화
+  );
   runApp(const MyApp());
 }
 
