@@ -1,7 +1,7 @@
 import 'dart:io';  // 플랫폼 체크를 위해 필요
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import '../../widgets/login_button.dart'; 
 
 class LoginPage extends StatelessWidget {
@@ -13,14 +13,14 @@ class LoginPage extends StatelessWidget {
 
       var provider = OAuthProvider('oidc.kakao_login');
       var credential = provider.credential(
-        idToken: token.idToken,
+        idToken: token.idToken ?? "", // null이면 빈 문자열로 처리
         accessToken: token.accessToken,
       );
 
       await _auth.signInWithCredential(credential);
 
       // 로그인 성공 시 다음 화면으로 이동
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/splash');
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("카카오 로그인 실패: $error")),
