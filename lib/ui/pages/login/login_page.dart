@@ -53,6 +53,7 @@ class LoginPage extends StatelessWidget {
                   "나만의 예술취향을\n기록하고 발견하세요",
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    fontFamily: 'DungGeunMo',
                     fontSize: 24,
                     fontWeight: FontWeight.w400,
                     height: 32 / 24,
