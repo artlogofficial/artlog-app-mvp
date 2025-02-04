@@ -1,7 +1,7 @@
 import 'dart:io';  // 플랫폼 체크를 위해 필요
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import '../../widgets/login_button.dart'; 
 
 class LoginPage extends StatelessWidget {
@@ -53,7 +53,7 @@ class LoginPage extends StatelessWidget {
               // 카카오 로그인 버튼 (모든 플랫폼 공통)
               LoginButton(
                 text: "카카오톡으로 시작하기",
-                color: Colors.green,
+                color: Colors.yellow,
                 textColor: Colors.black,
                 onPressed: () => _kakaoLogin(context),
               ),
