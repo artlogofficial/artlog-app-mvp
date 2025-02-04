@@ -3,12 +3,19 @@ import 'package:artlog_app_mvp/ui/pages/login/login_page.dart';
 import 'package:artlog_app_mvp/ui/pages/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, // 파이어베이스 초기화
   );
+
+   KakaoSdk.init(
+    nativeAppKey: '076ca6243ce1d2beff696c34423eefac',
+    javaScriptAppKey: '3a72d5c2a733b185eb6458afae8a4d17', // 카카오 SDK 초기화
+  );
+
   runApp(const MyApp());
 }
 
