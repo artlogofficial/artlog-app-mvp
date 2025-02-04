@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
         children: [
           // 배경 이미지
           Image.asset(
-            'assets/splash_screen.png',
+            'assets/images/splash_screen.png',
             fit: BoxFit.cover,
           ),
           // 로그인 UI
@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
             children: [
               const Spacer(),
               const Text(
-                "너만의 예술취향을\n기록하고 발견하세요",
+                "나만의 예술취향을\n기록하고 발견하세요",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
