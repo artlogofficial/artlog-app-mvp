@@ -1,4 +1,5 @@
 import 'dart:io';  // 플랫폼 체크를 위해 필요
+import 'package:artlog_app_mvp/ui/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -19,9 +20,13 @@ class LoginPage extends StatelessWidget {
 
       await _auth.signInWithCredential(credential);
 
-      // 로그인 성공 시 다음 화면으로 이동
-      Navigator.pushReplacementNamed(context, '/splash');
+      // 로그인 성공 시 홈화면으로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()), // HomePage 직접 호출
+      );
     } catch (error) {
+      print("카카오 로그인 실패: $error");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("카카오 로그인 실패: $error")),
       );
