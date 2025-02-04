@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.artlog_app_mvp">
     <application
         android:label="artlog_app_mvp"
         android:name="${applicationName}"
