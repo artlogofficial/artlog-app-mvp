@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          // ✅ 그라데이션 배경 적용
+          // 그라데이션 배경
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -25,16 +25,16 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ✅ 왼쪽 상단 로고
+              // 왼쪽 상단 로고
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 10),
                 child: Image.asset(
                   'assets/images/artlog_logo.png',
-                  height: 30, // 로고 크기 조절
+                  height: 30, 
                 ),
               ),
 
-              // ✅ 메인 컨텐츠
+              // 메인 컨텐츠
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
 
-              // ✅ 하단 네비게이션 바
+              // 하단 네비게이션 바
               _buildBottomNavigationBar(),
             ],
           ),
@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ✅ 기록 버튼 위젯
+  // 기록 버튼 위젯
   Widget _buildRecordButton(String title, String subtitle) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -105,7 +105,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ✅ 하단 네비게이션 바
+  // 하단 네비게이션 바
   Widget _buildBottomNavigationBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ✅ 네비게이션 아이템
+  // 네비게이션 아이템
   Widget _buildNavItem(IconData icon, String label, {bool isSelected = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
