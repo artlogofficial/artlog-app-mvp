@@ -3,7 +3,7 @@ import 'package:artlog_app_mvp/ui/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import '../../widgets/login_button.dart';
+import '../../widgets/buttons/login_button.dart';
 
 class LoginPage extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase 인증 인스턴스
