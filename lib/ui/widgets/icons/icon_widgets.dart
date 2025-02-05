@@ -42,4 +42,19 @@ class AppIcons {
   static Widget trashOutlined({double size = defaultSize, Color color = Colors.black}) {
     return Icon(Icons.delete_outline, size: size, color: color);
   }
+
+  // 🔔 Alarm (알림) 아이콘
+  static Widget alarm({double size = defaultSize, Color color = Colors.black}) {
+    return Icon(Icons.notifications, size: size, color: color);
+  }
+
+  // ◀ Back (뒤로가기) 아이콘
+  static Widget back({double size = defaultSize, Color color = Colors.black}) {
+    return Icon(Icons.arrow_back, size: size, color: color);
+  }
+
+  // ❌ Close (닫기) 아이콘
+  static Widget close({double size = defaultSize, Color color = Colors.black}) {
+    return Icon(Icons.close, size: size, color: color);
+  }
 }
