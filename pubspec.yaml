@@ -64,7 +64,7 @@ flutter:
   assets:
     - assets/images/
     - assets/datas/exhibition.json
-
+    - assets/datas/gallery.json
   fonts:
     - family: DungGeunMo
       fonts:
