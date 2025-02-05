@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Fish & Chips",
+    "artist": "SUPERFLEX",
+    "gallery_id": "gallery_001",
+    "start_date": "2024-06-04",
+    "end_date": "2024-07-28",
+    "poster_thumb_url": "https://firebasestorage.googleapis.com/v0/b/artlog-app-72ff1.firebasestorage.app/o/poster_thumb%2Fgallery_001_LightArt_2025.jpg.jpg?alt=media&token=4554920d-f9df-449e-996d-0e6a1b91d133"
+  },
+  {
+    "title": "Light & Shadow",
+    "artist": "김민수",
+    "gallery_id": "gallery_002",
+    "start_date": "2024-07-01",
+    "end_date": "2024-08-31",
+    "poster_thumb_url": "https://firebasestorage.googleapis.com/v0/b/artlog-app-72ff1.firebasestorage.app/o/poster_thumb%2Fgallery_002_AbstractForms_2025.png?alt=media&token=44925d65-4c63-4686-bfd3-3041f38bd1fe"
+  },
+  {
+    "title": "Solidarity: 표류의 어려움",
+    "artist": "오유경",
+    "gallery_id": "gallery_003",
+    "start_date": "2025-02-05",
+    "end_date": "2025-02-25",
+    "poster_thumb_url": "https://firebasestorage.googleapis.com/v0/b/artlog-app-72ff1.firebasestorage.app/o/poster_thumb%2Fgallery_001_LightArt_2025.jpg.jpg?alt=media&token=4554920d-f9df-449e-996d-0e6a1b91d133"
+  }
+]
