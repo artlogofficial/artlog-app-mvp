@@ -4,14 +4,19 @@ import 'package:artlog_app_mvp/ui/pages/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
+import 'package:artlog_app_mvp/json_upload/upload_json.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, // 파이어베이스 초기화
   );
 
-   KakaoSdk.init(
+  // Firestore에 JSON 데이터 자동 업로드
+  UploadJsonService uploadService = UploadJsonService();
+  await uploadService.uploadJsonToFirestore();
+
+  KakaoSdk.init(
     nativeAppKey: '076ca6243ce1d2beff696c34423eefac',
     javaScriptAppKey: '3a72d5c2a733b185eb6458afae8a4d17', // 카카오 SDK 초기화
   );
@@ -30,7 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainPage(),  // 첫 화면을 MainPage로 설정
+      home: const MainPage(), // 첫 화면을 MainPage로 설정
     );
   }
 }
