@@ -19,6 +19,8 @@ void main() async {
   // ✅ 갤러리 정보 업로드
   await uploadService.uploadGalleriesToFirestore();
 
+  await uploadService.checkGalleriesInFirestore();
+
   KakaoSdk.init(
     nativeAppKey: '076ca6243ce1d2beff696c34423eefac',
     javaScriptAppKey: '3a72d5c2a733b185eb6458afae8a4d17', // 카카오 SDK 초기화

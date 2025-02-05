@@ -83,6 +83,25 @@ class UploadJsonService {
     }
   }
 
+  //Firestore 데이터 확인 함수 추가
+  Future<void> checkGalleriesInFirestore() async {
+    try {
+      CollectionReference collectionRef = _firestore.collection('galleries');
+      QuerySnapshot snapshot = await collectionRef.get();
+
+      if (snapshot.docs.isEmpty) {
+        print("❌ Firestore에 갤러리 데이터가 없습니다!");
+      } else {
+        print("✅ Firestore에 저장된 갤러리 목록:");
+        for (var doc in snapshot.docs) {
+          print("🖼 ${doc['name']} (ID: ${doc['id']}, 주소: ${doc['address']})");
+        }
+      }
+    } catch (e) {
+      print("❌ Firestore 데이터 확인 중 오류 발생: $e");
+    }
+  }
+
   /// 종료일 기준으로 status 설정하는 함수
   String getStatus(String endDateString) {
     DateTime endDate = DateTime.parse(endDateString);
