@@ -5,6 +5,7 @@ class LoginButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final VoidCallback onPressed;
+  final String icon;
 
   const LoginButton({
     Key? key,
@@ -12,6 +13,7 @@ class LoginButton extends StatelessWidget {
     required this.color,
     required this.textColor,
     required this.onPressed,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -19,18 +21,42 @@ class LoginButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: SizedBox(
-        width: double.infinity,
-        height: 50,
+        width: 328,
+        height: 52,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
             foregroundColor: textColor,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
           onPressed: onPressed,
-          child: Text(text, style: const TextStyle(fontSize: 16)),
+          child: Row(
+            children: [
+              Image.asset(
+                icon,
+                width: 24,
+                height: 24,
+              ),
+              const SizedBox(width: 10),
+
+              Expanded(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    height: 24 / 18,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
