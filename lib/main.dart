@@ -4,7 +4,7 @@ import 'package:artlog_app_mvp/ui/pages/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
-import 'package:artlog_app_mvp/json_upload/upload_json.dart';
+import 'package:artlog_app_mvp/upload_json.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,10 @@ void main() async {
 
   // Firestore에 JSON 데이터 자동 업로드
   UploadJsonService uploadService = UploadJsonService();
-  await uploadService.uploadJsonToFirestore();
+  // ✅ 전시 정보 업로드
+  await uploadService.uploadExhibitionsToFirestore();
+  // ✅ 갤러리 정보 업로드
+  await uploadService.uploadGalleriesToFirestore();
 
   KakaoSdk.init(
     nativeAppKey: '076ca6243ce1d2beff696c34423eefac',
