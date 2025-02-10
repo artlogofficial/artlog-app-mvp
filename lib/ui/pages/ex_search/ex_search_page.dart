@@ -84,9 +84,9 @@ class _ExSearchPageState extends State<ExSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "NOW 기록", // 앱바 타이틀
+        title: "NOW 기록", 
         type: AppBarType.sub, // 서브 앱바 스타일 적용
-        showBackButton: true, // 뒤로 가기 버튼 표시
+        showBackButton: true, 
       ),
       body: Column(
         children: [
