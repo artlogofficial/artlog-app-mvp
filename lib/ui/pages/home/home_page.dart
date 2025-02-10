@@ -1,7 +1,24 @@
+import 'package:artlog_app_mvp/ui/widgets/navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // TODO: 각 탭에 따라 다른 페이지로 이동하는 로직 추가 가능
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +30,12 @@ class HomePage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF4079CA), // 15%
-              Color(0xFF0276F8), // 49.67%
-              Color(0xFF9DC8CE), // 74.38%
-              Color(0xFFF782B3), // 89.4%
+              Color(0xFF4079CA),
+              Color(0xFF0276F8),
+              Color(0xFF9DC8CE),
+              Color(0xFFF782B3),
             ],
-            stops: [0.15, 0.4967, 0.7438, 0.894], // 각 색상의 위치 설정
+            stops: [0.15, 0.4967, 0.7438, 0.894],
           ),
         ),
         child: SafeArea(
@@ -44,7 +61,7 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // 텍스트 색상
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -56,12 +73,13 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // 하단 네비게이션 바
-              _buildBottomNavigationBar(),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigation(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
       ),
     );
   }
@@ -72,7 +90,7 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, // 버튼 배경색
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -102,44 +120,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  // 하단 네비게이션 바
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9), // 반투명 배경
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.book, "기록", isSelected: true),
-          _buildNavItem(Icons.archive, "아카이브"),
-          _buildNavItem(Icons.person, "마이 프로필"),
-        ],
-      ),
-    );
-  }
-
-  // 네비게이션 아이템
-  Widget _buildNavItem(IconData icon, String label, {bool isSelected = false}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isSelected ? Colors.blue : Colors.black),
-        const SizedBox(height: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.blue : Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }
