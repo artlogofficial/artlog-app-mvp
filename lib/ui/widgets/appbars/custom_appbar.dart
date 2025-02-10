@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: _buildLeading(context),
-      leadingWidth: 120, // leading 영역의 너비 설정 (로고가 잘리지 않도록)
+      leadingWidth: type == AppBarType.main ? 120 : 48, // sub일 때 기본 크기 조정
       title: _buildTitle(),
       centerTitle: type != AppBarType.main, // 메인 앱바에서는 가운데 정렬 비활성화
       backgroundColor: Colors.transparent,
@@ -47,11 +47,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       return Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: SizedBox(
-          width: 120, // 충분한 너비 확보하여 로고가 잘리지 않도록 설정
+          width: 120,
           height: kToolbarHeight,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: LogoWidget(size: 36), // 로고 크기 고정
+            child: LogoWidget(size: 36),
           ),
         ),
       );
@@ -59,9 +59,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     if (!showBackButton) return null;
 
-    return IconButton(
-      icon: const Icon(Icons.arrow_back, color: Colors.black),
-      onPressed: onBack ?? () => Navigator.pop(context),
+    return Padding(
+      padding: const EdgeInsets.only(left: 12.0), // 왼쪽에서 12만큼 떨어지게 설정
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        onPressed: onBack ?? () => Navigator.pop(context),
+      ),
     );
   }
 
