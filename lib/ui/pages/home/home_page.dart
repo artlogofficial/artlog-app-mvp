@@ -1,7 +1,6 @@
 import 'package:artlog_app_mvp/ui/widgets/navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -16,16 +15,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
     });
-
-    // TODO: 각 탭에 따라 다른 페이지로 이동하는 로직 추가 가능
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
-          // 그라데이션 배경
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -40,33 +38,50 @@ class _HomePageState extends State<HomePage> {
         ),
         child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center, // ✅ 내부 요소 중앙 정렬
             children: [
-              // 왼쪽 상단 로고
+              // 🔹 상단 로고 (왼쪽 정렬 유지)
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 10),
                 child: Image.asset(
                   'assets/images/artlog_logo.png',
-                  height: 30, 
+                  height: 30,
                 ),
               ),
 
-              // 메인 컨텐츠
+              // 🔹 메인 컨텐츠 중앙 정렬
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ 내부 요소 중앙 정렬
                   children: [
                     const Text(
                       "오늘 전시를 기록해 보세요.",
+                      textAlign: TextAlign.center, // ✅ 텍스트 중앙 정렬
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
-                    // NOW, LOOK, DEEP 버튼
+                    // 🔹 포스터 이미지 중앙 정렬
+                    Center( // ✅ 추가된 부분
+                      child: Container(
+                        width: 200,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/poster.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+
+                    // 🔹 NOW, LOOK, DEEP 버튼 (중앙 정렬)
                     _buildRecordButton("NOW", "가볍게 기록"),
                     _buildRecordButton("LOOK", "보이는대로 기록"),
                     _buildRecordButton("DEEP", "성찰하며 기록"),
@@ -77,6 +92,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
+      // ✅ 네비게이션 바
       bottomNavigationBar: BottomNavigation(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
@@ -84,40 +101,51 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // 기록 버튼 위젯
+  // 기록 버튼 위젯 (중앙 정렬)
   Widget _buildRecordButton(String title, String subtitle) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+    return Center( // ✅ 버튼 중앙 정렬
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+        child: Container(
+          width: 328,
+          height: 65,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: ShapeDecoration(
+            color: Color(0xFFF2F2F2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32),
+            ),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-        onPressed: () {
-          // TODO: 버튼 클릭 시 이동할 페이지 설정
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 26,
+                  fontFamily: 'DungGeunMo',
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -1.5,
+                ),
               ),
-            ),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
+              Row(
+                children: [
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Color(0xFF222222),
+                      fontSize: 14,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -69,7 +69,8 @@ flutter:
     - family: DungGeunMo
       fonts:
         - asset: assets/fonts/DungGeunMo.ttf
-          fonts:
+    - family: Pretendard
+      fonts:
         - asset: assets/fonts/Pretendard-Regular.ttf
           weight: 400
         - asset: assets/fonts/Pretendard-Bold.ttf
