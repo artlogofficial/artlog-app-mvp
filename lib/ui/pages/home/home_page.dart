@@ -1,4 +1,5 @@
 import 'package:artlog_app_mvp/ui/widgets/navigation/bottom_navigation.dart';
+import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,6 +21,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: CustomAppBar(
+        type: AppBarType.main,
+        title: '',
+        showBackButton: false,
+        onAlarmPressed: () {
+          // 알람 아이콘 클릭시 실행될 로직
+        },
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -36,64 +46,53 @@ class _HomePageState extends State<HomePage> {
             stops: [0.15, 0.4967, 0.7438, 0.894],
           ),
         ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ 내부 요소 중앙 정렬
-            children: [
-              // 🔹 상단 로고 (왼쪽 정렬 유지)
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
-                child: Image.asset(
-                  'assets/images/artlog_logo.png',
-                  height: 30,
-                ),
-              ),
-
-              // 🔹 메인 컨텐츠 중앙 정렬
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center, // ✅ 내부 요소 중앙 정렬
-                  children: [
-                    const Text(
-                      "오늘 전시를 기록해 보세요.",
-                      textAlign: TextAlign.center, // ✅ 텍스트 중앙 정렬
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight),
+            // 메인 컨텐츠 중앙 정렬
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "오늘 전시를 기록해 보세요.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 10),
+                  ),
+                  const SizedBox(height: 10),
 
-                    // 🔹 포스터 이미지 중앙 정렬
-                    Center( // ✅ 추가된 부분
-                      child: Container(
-                        width: 200,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/images/poster.png"),
-                            fit: BoxFit.cover,
-                          ),
+                  // 포스터 이미지 중앙 정렬
+                  Center(
+                    child: Container(
+                      width: 200,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/poster.png"),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
+                  ),
+                  const SizedBox(height: 15),
 
-                    // 🔹 NOW, LOOK, DEEP 버튼 (중앙 정렬)
-                    _buildRecordButton("NOW", "가볍게 기록"),
-                    _buildRecordButton("LOOK", "보이는대로 기록"),
-                    _buildRecordButton("DEEP", "성찰하며 기록"),
-                  ],
-                ),
+                  // NOW, LOOK, DEEP 버튼 (중앙 정렬)
+                  _buildRecordButton("NOW", "가볍게 기록"),
+                  _buildRecordButton("LOOK", "보이는대로 기록"),
+                  _buildRecordButton("DEEP", "성찰하며 기록"),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
 
-      // ✅ 네비게이션 바
       bottomNavigationBar: BottomNavigation(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
@@ -101,9 +100,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // 기록 버튼 위젯 (중앙 정렬)
   Widget _buildRecordButton(String title, String subtitle) {
-    return Center( // ✅ 버튼 중앙 정렬
+    return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
         child: Container(
