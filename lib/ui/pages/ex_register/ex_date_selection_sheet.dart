@@ -30,7 +30,7 @@ class DatePickerBottomSheet {
                   child: SfDateRangePicker(
                     selectionMode: DateRangePickerSelectionMode.range,
                     initialSelectedRange: initialStartDate != null && initialEndDate != null
-                        ? PickerDateRange(initialStartDate, initialEndDate) // 🟢 기존 선택 값 유지
+                        ? PickerDateRange(initialStartDate, initialEndDate) // 기존 선택 값 유지
                         : null,
                     onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                       if (args.value is PickerDateRange) {

@@ -17,8 +17,8 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
   final TextEditingController exhibitionNameController = TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
 
-  DateTime? selectedStartDate; // 🟢 시작 날짜 상태 추가
-  DateTime? selectedEndDate; // 🟢 종료 날짜 상태 추가
+  DateTime? selectedStartDate; // 시작 날짜 상태 추가
+  DateTime? selectedEndDate; // 종료 날짜 상태 추가
 
   String get formattedDateRange {
     if (selectedStartDate != null && selectedEndDate != null) {
@@ -96,13 +96,13 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
-                  hintText: formattedDateRange, // 🟢 선택된 날짜 표시
+                  hintText: formattedDateRange, // 선택된 날짜 표시
                   leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
                     DatePickerBottomSheet.show(
                       context,
-                      selectedStartDate, // 🟢 기존 시작 날짜 전달
-                      selectedEndDate, // 🟢 기존 종료 날짜 전달
+                      selectedStartDate, // 기존 시작 날짜 전달
+                      selectedEndDate, // 기존 종료 날짜 전달
                       (startDate, endDate) {
                         setState(() {
                           selectedStartDate = startDate;
@@ -113,7 +113,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   },
                 ),
 
-                // 📌 "다음" 버튼 - 중앙 정렬
+                // "다음" 버튼 - 중앙 정렬
                 Center(
                   child: ContainedButton(
                     text: "다음",
