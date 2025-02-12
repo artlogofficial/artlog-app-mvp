@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:intl/intl.dart'; // 날짜 포맷을 위한 패키지
+import 'package:intl/intl.dart';
 
 class DatePickerBottomSheet {
   static void show(
@@ -9,61 +9,77 @@ class DatePickerBottomSheet {
     DateTime? initialEndDate,
     Function(DateTime, DateTime) onDateSelected,
   ) {
-    DateTime? selectedStartDate = initialStartDate;
-    DateTime? selectedEndDate = initialEndDate;
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white, // bottom sheet 배경색 설정
+      backgroundColor: Colors.white, // BottomSheet 배경색 설정
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // 상단 둥근 모서리 적용
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
+        DateTime? selectedStart = initialStartDate;
+        DateTime? selectedEnd = initialEndDate;
+
         return StatefulBuilder(
           builder: (context, setState) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom, // 키보드 영역 고려
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.55, // 반응형 높이 적용
                 padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 선택된 날짜 표시 (없을 경우 기본 텍스트 출력)
+                    // 선택된 날짜 표시 (굵게)
                     Text(
-                      selectedStartDate != null && selectedEndDate != null
-                          ? "${DateFormat('yyyy.MM.dd').format(selectedStartDate!)} - ${DateFormat('yyyy.MM.dd').format(selectedEndDate!)}"
-                          : "기간을 선택하세요",
+                      (selectedStart != null && selectedEnd != null)
+                          ? "${DateFormat('yyyy.MM.dd').format(selectedStart!)} - ${DateFormat('yyyy.MM.dd').format(selectedEnd!)}"
+                          : "날짜를 선택하세요",
                       style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 16),
 
-                    // 날짜 선택 위젯
+                    // 날짜 선택기
                     Expanded(
                       child: SfDateRangePicker(
-                        selectionMode: DateRangePickerSelectionMode.range, // 범위 선택 모드
-                        initialSelectedRange: selectedStartDate != null && selectedEndDate != null
-                            ? PickerDateRange(selectedStartDate, selectedEndDate) // 기존 선택 값 유지
+                        selectionMode: DateRangePickerSelectionMode.range,
+                        initialSelectedRange: selectedStart != null && selectedEnd != null
+                            ? PickerDateRange(selectedStart, selectedEnd)
                             : null,
-
-                        // 선택된 날짜 스타일
-                        selectionColor: const Color(0xFF00E068), // 선택한 날짜 동그라미 색
-                        rangeSelectionColor: const Color(0xFFA8F0C0), // 선택된 날짜 사이 배경색
-                        startRangeSelectionColor: const Color(0xFF00E068), // 시작일 색상
-                        endRangeSelectionColor: const Color(0xFF00E068), // 종료일 색상
-
+                        backgroundColor: Colors.white, // 달력 내부 색상 변경
+                        monthViewSettings: const DateRangePickerMonthViewSettings(
+                          firstDayOfWeek: 1,
+                        ),
+                        selectionColor: const Color(0xFF00E068), // 선택된 날짜 색상
+                        rangeSelectionColor: const Color(0xFF99F0B0), // 선택된 날짜 사이 색상
+                        startRangeSelectionColor: const Color(0xFF00E068), // 시작 날짜 색상
+                        endRangeSelectionColor: const Color(0xFF00E068), // 종료 날짜 색상
+                        headerStyle: const DateRangePickerHeaderStyle(
+                          backgroundColor: Colors.white, // 헤더 배경색을 BottomSheet 배경과 동일하게 설정
+                          textAlign: TextAlign.center,
+                          textStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // 텍스트 색상 유지
+                          ),
+                        ),
+                        monthFormat: 'yyyy년 M월', // 년/월 포맷 변경
                         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                           if (args.value is PickerDateRange) {
+                            final DateTime? startDate = args.value.startDate;
+                            final DateTime? endDate = args.value.endDate;
                             setState(() {
-                              selectedStartDate = args.value.startDate;
-                              selectedEndDate = args.value.endDate;
+                              selectedStart = startDate;
+                              selectedEnd = endDate;
                             });
                           }
                         },
@@ -71,34 +87,43 @@ class DatePickerBottomSheet {
                     ),
 
                     const SizedBox(height: 16),
-                    
+
                     // 확인 버튼
                     SizedBox(
-                      width: double.infinity,
+                                            width: MediaQuery.of(context).size.width * 0.8, // 가로 길이 조정
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00E068), // 버튼 색상
+                          backgroundColor: const Color(0xFF00E068),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12), // 둥근 모서리
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
-                          if (selectedStartDate != null && selectedEndDate != null) {
-                            onDateSelected(selectedStartDate!, selectedEndDate!);
+                          if (selectedStart != null && selectedEnd != null) {
+                            onDateSelected(selectedStart!, selectedEnd!);
+                            Navigator.pop(context);
+                          } else {
+                            // 날짜 미선택 시 경고 메시지 표시
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("날짜를 선택해주세요."),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
                           }
-                          Navigator.pop(context); // bottom sheet 닫기
                         },
                         child: const Text(
                           "확인",
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16), // 하단 여백 추가
                   ],
                 ),
               ),
