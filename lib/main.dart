@@ -16,9 +16,9 @@ void main() async {
 
   // Firestore에 JSON 데이터 자동 업로드
   UploadJsonService uploadService = UploadJsonService();
-  // ✅ 전시 정보 업로드
+  // 전시 정보 업로드
   await uploadService.uploadExhibitionsToFirestore();
-  // ✅ 갤러리 정보 업로드
+  // 갤러리 정보 업로드
   await uploadService.uploadGalleriesToFirestore();
 
   KakaoSdk.init(
@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'ArtLog',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: Color.fromRGBO(242, 242, 242, 1.0), // 배경색 설정
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple), // 색상 스키마 설정
         useMaterial3: true,
       ),
       home: const MainPage(), // 첫 화면을 MainPage로 설정
