@@ -12,7 +12,7 @@ class DatePickerBottomSheet {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white, // BottomSheet 배경색 설정
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -27,7 +27,7 @@ class DatePickerBottomSheet {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.55, // 반응형 높이 적용
+                height: MediaQuery.of(context).size.height * 0.55,
                 padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -48,31 +48,32 @@ class DatePickerBottomSheet {
                     ),
                     const SizedBox(height: 16),
 
-                    // 날짜 선택기
                     Expanded(
                       child: SfDateRangePicker(
                         selectionMode: DateRangePickerSelectionMode.range,
                         initialSelectedRange: selectedStart != null && selectedEnd != null
                             ? PickerDateRange(selectedStart, selectedEnd)
                             : null,
-                        backgroundColor: Colors.white, // 달력 내부 색상 변경
+                        backgroundColor: Colors.white,
                         monthViewSettings: const DateRangePickerMonthViewSettings(
                           firstDayOfWeek: 1,
                         ),
-                        selectionColor: const Color(0xFF00E068), // 선택된 날짜 색상
-                        rangeSelectionColor: const Color(0xFF99F0B0), // 선택된 날짜 사이 색상
-                        startRangeSelectionColor: const Color(0xFF00E068), // 시작 날짜 색상
-                        endRangeSelectionColor: const Color(0xFF00E068), // 종료 날짜 색상
+                        selectionColor: const Color(0xFF00E068),
+                        rangeSelectionColor: const Color(0xFF99F0B0),
+                        startRangeSelectionColor: const Color(0xFF00E068),
+                        endRangeSelectionColor: const Color(0xFF00E068),
+                        headerHeight: 50, // 헤더 높이 조정
                         headerStyle: const DateRangePickerHeaderStyle(
-                          backgroundColor: Colors.white, // 헤더 배경색을 BottomSheet 배경과 동일하게 설정
-                          textAlign: TextAlign.center,
+                          backgroundColor: Colors.white,
+                          textAlign: TextAlign.center, // 텍스트 중앙 정렬
                           textStyle: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black, // 텍스트 색상 유지
+                            color: Colors.black,
                           ),
                         ),
-                        monthFormat: 'yyyy년 M월', // 년/월 포맷 변경
+                        navigationDirection: DateRangePickerNavigationDirection.horizontal,
+                        monthFormat: 'M월', 
                         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                           if (args.value is PickerDateRange) {
                             final DateTime? startDate = args.value.startDate;
@@ -88,9 +89,8 @@ class DatePickerBottomSheet {
 
                     const SizedBox(height: 16),
 
-                    // 확인 버튼
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8, // 가로 길이 조정
+                      width: MediaQuery.of(context).size.width * 0.6, // 확인 버튼 길이 조정
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF00E068),
@@ -104,7 +104,6 @@ class DatePickerBottomSheet {
                             onDateSelected(selectedStart!, selectedEnd!);
                             Navigator.pop(context);
                           } else {
-                            // 날짜 미선택 시 경고 메시지 표시
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("날짜를 선택해주세요."),
@@ -123,7 +122,7 @@ class DatePickerBottomSheet {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16), // 하단 여백 추가
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
