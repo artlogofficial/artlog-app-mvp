@@ -32,13 +32,15 @@ class ExRegisterCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center, // 중앙 정렬
         children: [
-          // 제목 + 선택 텍스트 조합
+          // 제목 + 선택 텍스트 중앙 정렬
           Row(
+            mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
             children: [
               Text(
                 title,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Color(0xFF222222),
                   fontSize: 16,
@@ -46,9 +48,10 @@ class ExRegisterCard extends StatelessWidget {
                 ),
               ),
               if (optionalHint != null) ...[
-                const SizedBox(width: 8), // 간격 조정
+                const SizedBox(width: 8),
                 Text(
                   optionalHint!,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Color(0xFF9E9E9E),
                     fontSize: 14,
@@ -67,18 +70,37 @@ class ExRegisterCard extends StatelessWidget {
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: ShapeDecoration(
-                    color: Color(0xFFF7F7F7),
+                    color: const Color(0xFFF7F7F7), 
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(width: 1, color: Color(0xFFEFEFEF)),
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
+                  alignment: Alignment.center, // 텍스트 필드 세로 중앙 정렬
                   child: TextField(
                     controller: controller,
+                    textAlignVertical: TextAlignVertical.center, // 세로 중앙 정렬
+                    style: const TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      height: 1.5, 
+                      letterSpacing: 0,
+                      color: Color(0xFF222222),
+                    ),
                     decoration: InputDecoration(
                       hintText: hintText,
+                      hintStyle: const TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        height: 1.5,
+                        letterSpacing: 0,
+                        color: Color(0xFF8A8A8A), // Placeholder 색상 적용
+                      ),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16), // 높이 맞춤
+                      isDense: true, // 패딩 줄이기
+                      contentPadding: EdgeInsets.zero, // 내부 패딩 제거 (세로 정렬 유지)
                     ),
                   ),
                 )
@@ -89,23 +111,23 @@ class ExRegisterCard extends StatelessWidget {
                     height: 52,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: ShapeDecoration(
-                      color: Color(0xFFF7F7F7),
+                      color: const Color(0xFFF7F7F7),
                       shape: RoundedRectangleBorder(
                         side: const BorderSide(width: 1, color: Color(0xFFEFEFEF)),
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
+                      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬 유지
                       children: [
                         if (leadingIcon != null) ...[
                           leadingIcon!,
-                          const SizedBox(width: 8), // 아이콘과 텍스트 간격
+                          const SizedBox(width: 8), // 아이콘과 텍스트 간격 조정
                         ],
                         Expanded(
                           child: Text(
                             hintText ?? "",
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.start, // 중앙 정렬 방지 (왼쪽 배치)
                             style: const TextStyle(
                               color: Color(0xFF222222),
                               fontSize: 16,
