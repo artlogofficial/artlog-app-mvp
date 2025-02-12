@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:artlog_app_mvp/ui/widgets/common/page_title.dart';
+import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
+import 'package:artlog_app_mvp/ui/widgets/textfields/search_filed.dart'; 
+import 'package:artlog_app_mvp/ui/widgets/buttons/outlined_button.dart';
+import 'package:artlog_app_mvp/ui/pages/ex_register/ex_register_page.dart'; 
 
 class ExSearchPage extends StatefulWidget {
   @override
@@ -8,8 +14,9 @@ class ExSearchPage extends StatefulWidget {
 
 class _ExSearchPageState extends State<ExSearchPage> {
   TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> searchResults = []; // ✅ 전시 + 갤러리 이름 포함된 리스트
+  List<Map<String, dynamic>> searchResults = [];
 
+  /// 전시 검색 함수
   void searchExhibitions(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -18,31 +25,31 @@ class _ExSearchPageState extends State<ExSearchPage> {
       return;
     }
 
-    String queryLower = query.toLowerCase(); // 검색어 소문자로 변환
+    String queryLower = query.toLowerCase();
 
-    // ✅ 갤러리 정보에서 검색어 포함된 갤러리 찾기
+    // Firestore에서 갤러리 데이터 가져오기
     QuerySnapshot gallerySnapshot =
         await FirebaseFirestore.instance.collection('galleries').get();
 
     List<String> matchingGalleryIds = [];
-    Map<String, String> galleryMap = {}; // {gallery_id: gallery_name} 저장
+    Map<String, String> galleryMap = {};
 
     for (var doc in gallerySnapshot.docs) {
       Map<String, dynamic> galleryData = doc.data() as Map<String, dynamic>;
       String galleryId = galleryData['id'];
       String galleryName = galleryData['name'];
 
-      galleryMap[galleryId] = galleryName; // ✅ 갤러리 ID → 이름 매핑 저장
+      galleryMap[galleryId] = galleryName;
 
       if (galleryName.toLowerCase().contains(queryLower)) {
-        matchingGalleryIds.add(galleryId); // ✅ 검색어가 갤러리명에 포함된 경우 ID 저장
+        matchingGalleryIds.add(galleryId);
       }
     }
 
-    // ✅ Firestore에서 진행 중인 전시만 가져오기
+    // Firestore에서 진행 중인 전시 가져오기
     QuerySnapshot exhibitionSnapshot = await FirebaseFirestore.instance
         .collection('exhibitions')
-        .where("status", isEqualTo: "ongoing") // 진행 중인 전시만 가져오기
+        .where("status", isEqualTo: "ongoing")
         .get();
 
     List<Map<String, dynamic>> filteredResults = [];
@@ -53,21 +60,19 @@ class _ExSearchPageState extends State<ExSearchPage> {
       String artist = exhibitionData['artist'].toLowerCase();
       String galleryId = exhibitionData['gallery_id'];
 
-      // 🔹 부분 검색 가능하도록 설정
+      // 검색어가 전시 제목, 작가명, 갤러리명에 포함되어 있는지 확인
       bool matchesQuery = title.contains(queryLower) ||
           artist.contains(queryLower) ||
-          galleryMap[galleryId]?.toLowerCase().contains(queryLower) ==
-              true || // ✅ 갤러리 이름 검색 추가
-          matchingGalleryIds.contains(galleryId); // ✅ 갤러리명 검색 결과 ID가 포함되면 매칭
+          galleryMap[galleryId]?.toLowerCase().contains(queryLower) == true ||
+          matchingGalleryIds.contains(galleryId);
 
       if (matchesQuery) {
-        String galleryName = galleryMap[galleryId] ?? "알 수 없음"; // ✅ 갤러리 이름 가져오기
+        String galleryName = galleryMap[galleryId] ?? "알 수 없음";
 
-        // 검색 결과에 전시 정보 + 갤러리 이름 포함
         filteredResults.add({
           'title': exhibitionData['title'],
           'artist': exhibitionData['artist'],
-          'gallery_name': galleryName, // ✅ 갤러리 ID → 갤러리 이름 변환
+          'gallery_name': galleryName,
           'end_date': exhibitionData['end_date'],
           'poster_thumb_url': exhibitionData['poster_thumb_url'],
         });
@@ -79,55 +84,115 @@ class _ExSearchPageState extends State<ExSearchPage> {
     });
   }
 
+  /// 검색 결과가 없을 때 보여줄 UI
+  Widget _buildNoResultsUI() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AppIcons.alert(size: 80, color: Colors.grey),
+          const SizedBox(height: 16),
+
+          Text(
+            '검색 결과가 없습니다.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF191919),
+              fontSize: 16,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              height: 1.50,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          Text(
+            '찾고 있는 결과가 없다면 직접 등록해 보세요.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF5B5B5B),
+              fontSize: 14,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              height: 1.43,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 버튼 클릭 시 ExRegisterPage로 이동
+          OutlinedButtonWidget(
+            text: '전시정보 등록',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ExRegisterPage()),
+              );
+            },
+            borderColor: Color(0xFF222222),
+            textColor: Color(0xFF222222),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("NOW 기록")),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: "전시명, 작가명, 갤러리명 검색",
-                prefixIcon: Icon(Icons.search),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      appBar: CustomAppBar(
+        title: "NOW 기록",
+        type: AppBarType.sub,
+        showBackButton: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(width: 328, child: PageTitle(title: "어떤 전시를 보셨나요?")),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 328,
+                child: SearchField(controller: _searchController),
               ),
-              onChanged: searchExhibitions,
             ),
-          ),
-          Expanded(
-            child: searchResults.isEmpty
-                ? Center(child: Text("검색 결과가 없습니다."))
-                : ListView.builder(
-                    itemCount: searchResults.length,
-                    itemBuilder: (context, index) {
-                      var data = searchResults[index];
-                      return ListTile(
-                        leading: Image.network(data['poster_thumb_url'],
-                            width: 50, height: 50, fit: BoxFit.cover),
-                        title: Text(data['title'],
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(data['artist'],
-                                style: TextStyle(color: Colors.grey)),
-                            Text(data['gallery_name'],
-                                style: TextStyle(
-                                    color: Colors.grey)), // ✅ 갤러리 이름 표시
-                            Text("~ ${data['end_date']}",
-                                style:
-                                    TextStyle(color: Colors.grey)), // ✅ 종료일만 표시
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+            Expanded(
+              child: searchResults.isEmpty
+                  ? _buildNoResultsUI()
+                  : ListView.builder(
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        var data = searchResults[index];
+                        return ListTile(
+                          leading: Image.network(
+                            data['poster_thumb_url'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            data['title'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['artist'], style: TextStyle(color: Colors.grey)),
+                              Text(data['gallery_name'], style: TextStyle(color: Colors.grey)),
+                              Text("~ ${data['end_date']}", style: TextStyle(color: Colors.grey)),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
