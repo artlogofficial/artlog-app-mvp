@@ -8,6 +8,7 @@ class ExRegisterCard extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isTextField; // TextField 여부 추가
   final TextEditingController? controller; // TextField 컨트롤러 추가
+  final bool hasValue; // 값이 입력되었는지 확인
 
   const ExRegisterCard({
     Key? key,
@@ -16,8 +17,9 @@ class ExRegisterCard extends StatelessWidget {
     this.optionalHint,
     this.leadingIcon,
     this.onTap,
-    this.isTextField = false, // 기본값 false로 설정
+    this.isTextField = false,
     this.controller,
+    this.hasValue = false, // 기본값은 값이 없는 상태
   }) : super(key: key);
 
   @override
@@ -32,11 +34,11 @@ class ExRegisterCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // 중앙 정렬
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // 제목 + 선택 텍스트 중앙 정렬
           Row(
-            mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
@@ -70,23 +72,23 @@ class ExRegisterCard extends StatelessWidget {
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFFF7F7F7), 
+                    color: const Color(0xFFF7F7F7),
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(width: 1, color: Color(0xFFEFEFEF)),
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  alignment: Alignment.center, // 텍스트 필드 세로 중앙 정렬
+                  alignment: Alignment.center,
                   child: TextField(
                     controller: controller,
-                    textAlignVertical: TextAlignVertical.center, // 세로 중앙 정렬
+                    textAlignVertical: TextAlignVertical.center,
                     style: const TextStyle(
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
-                      height: 1.5, 
+                      height: 1.5,
                       letterSpacing: 0,
-                      color: Color(0xFF222222),
+                      color: Color(0xFF222222), // 항상 검정색 유지
                     ),
                     decoration: InputDecoration(
                       hintText: hintText,
@@ -99,8 +101,8 @@ class ExRegisterCard extends StatelessWidget {
                         color: Color(0xFF8A8A8A), // Placeholder 색상 적용
                       ),
                       border: InputBorder.none,
-                      isDense: true, // 패딩 줄이기
-                      contentPadding: EdgeInsets.zero, // 내부 패딩 제거 (세로 정렬 유지)
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
                     ),
                   ),
                 )
@@ -118,18 +120,20 @@ class ExRegisterCard extends StatelessWidget {
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬 유지
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         if (leadingIcon != null) ...[
                           leadingIcon!,
-                          const SizedBox(width: 8), // 아이콘과 텍스트 간격 조정
+                          const SizedBox(width: 8),
                         ],
                         Expanded(
                           child: Text(
                             hintText ?? "",
-                            textAlign: TextAlign.start, // 중앙 정렬 방지 (왼쪽 배치)
-                            style: const TextStyle(
-                              color: Color(0xFF222222),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: hasValue
+                                  ? const Color(0xFF222222) // 값이 입력되었을 때 검정색
+                                  : const Color(0xFF8A8A8A), // 값이 없을 때 placeholder 색상
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                             ),

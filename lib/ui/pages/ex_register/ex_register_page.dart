@@ -1,5 +1,6 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
+import 'package:artlog_app_mvp/ui/pages/now_create/now_create_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
@@ -17,14 +18,15 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
       TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
 
-  DateTime? selectedStartDate; // 시작 날짜 상태 추가
-  DateTime? selectedEndDate; // 종료 날짜 상태 추가
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
+  String? selectedLocation;
 
   String get formattedDateRange {
     if (selectedStartDate != null && selectedEndDate != null) {
       return "${DateFormat('yyyy.MM.dd').format(selectedStartDate!)} - ${DateFormat('yyyy.MM.dd').format(selectedEndDate!)}";
     }
-    return ""; // 선택 전에는 빈 값
+    return "";
   }
 
   @override
@@ -51,11 +53,11 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
               children: [
                 const SizedBox(height: 24),
 
-                // 📌 사진 추가 / 이미지 업로드 영역
+                // 사진 추가 / 이미지 업로드 영역
                 ImageUploader(),
                 const SizedBox(height: 24),
 
-                // 📌 전시명 입력 (TextField)
+                // 전시명 입력 (TextField)
                 ExRegisterCard(
                   title: "전시 명",
                   isTextField: true,
@@ -64,26 +66,29 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // 📌 전시장소 입력
+                // 전시장소 입력 (선택 시 검정색 표시)
                 ExRegisterCard(
                   title: "전시 장소",
-                  hintText: "장소명 검색",
+                  hintText: selectedLocation ?? "장소명 검색",
+                  hasValue: selectedLocation != null, // 값이 있으면 검정색 적용
                   leadingIcon: Icon(Icons.search, color: Colors.grey),
                   onTap: () async {
-                    final selectedLocation = await Navigator.push(
+                    final location = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => LocationSearchPage()),
                     );
 
-                    if (selectedLocation != null) {
-                      print("선택한 장소: $selectedLocation");
+                    if (location != null) {
+                      setState(() {
+                        selectedLocation = location;
+                      });
                     }
                   },
                 ),
                 const SizedBox(height: 10),
 
-                // 📌 작가명 입력 (TextField, 선택 항목)
+                // 작가명 입력 (TextField, 선택 항목)
                 ExRegisterCard(
                   title: "작가 명",
                   optionalHint: "(선택)",
@@ -93,18 +98,21 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ),
                 const SizedBox(height: 10),
 
-                // 📌 전시기간 입력 (날짜 선택 시 업데이트)
+                // 전시기간 입력 (선택 시 검정색 표시)
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
-                  hintText: formattedDateRange, // 선택된 날짜 표시
+                  hintText: formattedDateRange.isNotEmpty
+                      ? formattedDateRange
+                      : "기간 선택",
+                  hasValue: formattedDateRange.isNotEmpty, // 값이 있으면 검정색 적용
                   leadingIcon:
                       const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
                     DatePickerBottomSheet.show(
                       context,
-                      selectedStartDate, // 기존 시작 날짜 전달
-                      selectedEndDate, // 기존 종료 날짜 전달
+                      selectedStartDate,
+                      selectedEndDate,
                       (startDate, endDate) {
                         setState(() {
                           selectedStartDate = startDate;
@@ -121,7 +129,12 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   child: ContainedButton(
                     text: "다음",
                     onPressed: () {
-                      // TODO: 다음 단계로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NowCreatePage()), // 전시 감상 기록 페이지로 이동
+                      );
                     },
                   ),
                 ),

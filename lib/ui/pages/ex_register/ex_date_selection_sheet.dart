@@ -90,7 +90,7 @@ class DatePickerBottomSheet {
 
                     // 확인 버튼
                     SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.8, // 가로 길이 조정
+                      width: MediaQuery.of(context).size.width * 0.8, // 가로 길이 조정
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF00E068),
