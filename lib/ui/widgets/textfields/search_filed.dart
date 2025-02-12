@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
-  final TextEditingController controller; // 사용자 입력 관리 컨트롤러 
+  final TextEditingController controller; // 사용자 입력 관리 컨트롤러
+  final String hintText; // 페이지마다 다른 힌트 텍스트 적용 가능
 
-  const SearchField({Key? key, required this.controller}) : super(key: key);
+  const SearchField({
+    Key? key,
+    required this.controller,
+    this.hintText = "전시명, 작가명, 갤러리명 검색", // 기본값 설정
+  }) : super(key: key);
 
   @override
   _SearchFieldState createState() => _SearchFieldState();
@@ -27,41 +32,41 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 328, 
+      width: 328,
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 16), 
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white, // 항상 흰색 배경 유지
-        borderRadius: BorderRadius.circular(44), 
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(44),
         border: Border.all(
-          color: Color(0xFFD8D8D8), 
-          width: 1, 
+          color: const Color(0xFFD8D8D8),
+          width: 1,
         ),
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.search,
             color: Color.fromRGBO(138, 138, 138, 1.0), // 돋보기 아이콘 색상
           ),
-          const SizedBox(width: 5.5), // 아이콘과 텍스트 필드 사이 간격 (gap: Radius/8)
+          const SizedBox(width: 5.5),
           Expanded(
             child: TextField(
               controller: widget.controller,
-              cursorColor: Color.fromRGBO(8, 112, 233, 1.0), 
+              cursorColor: const Color.fromRGBO(8, 112, 233, 1.0),
               decoration: InputDecoration(
-                hintText: isTyping ? "" : "전시명, 작가명, 갤러리명 검색",
+                hintText: isTyping ? "" : widget.hintText, // 동적 hintText 적용
                 border: InputBorder.none,
-                isDense: true, 
-                contentPadding: EdgeInsets.symmetric(vertical: 9), // 세로 정렬 조정
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 9),
               ),
               style: TextStyle(
-                color: isTyping ? Color(0xFF222222) : Color(0xFF898989), // 입력 여부에 따른 글씨 색상 변경
+                color: isTyping ? const Color(0xFF222222) : const Color(0xFF898989),
                 fontSize: 16,
               ),
             ),
           ),
-          if (isTyping) // 입력 중일 때만 X 버튼 표시
+          if (isTyping)
             GestureDetector(
               onTap: () {
                 widget.controller.clear();
@@ -69,7 +74,7 @@ class _SearchFieldState extends State<SearchField> {
                   isTyping = false;
                 });
               },
-              child: Icon(Icons.cancel, color: Colors.grey),
+              child: const Icon(Icons.cancel, color: Colors.grey),
             ),
         ],
       ),

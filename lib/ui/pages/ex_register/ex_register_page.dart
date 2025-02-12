@@ -1,3 +1,4 @@
+import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
@@ -10,7 +11,8 @@ class ExRegisterPage extends StatefulWidget {
 }
 
 class _ExRegisterPageState extends State<ExRegisterPage> {
-  final TextEditingController exhibitionNameController = TextEditingController();
+  final TextEditingController exhibitionNameController =
+      TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
 
   @override
@@ -38,7 +40,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 24),
 
                 // 📌 사진 추가 / 이미지 업로드 영역
-                ImageUploadWidget(),
+                ImageUploader(),
                 const SizedBox(height: 24),
 
                 // 📌 전시명 입력 (TextField)
@@ -54,9 +56,18 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ExRegisterCard(
                   title: "전시 장소",
                   hintText: "장소명 검색",
-                  leadingIcon: const Icon(Icons.search, color: Colors.grey),
-                  onTap: () {
-                    // TODO: 장소 검색 기능 추가
+                  leadingIcon: Icon(Icons.search, color: Colors.grey),
+                  onTap: () async {
+                    final selectedLocation = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LocationSearchPage()),
+                    );
+
+                    if (selectedLocation != null) {
+                      // TODO: 선택한 장소를 상태에 반영 (ex: setState 사용)
+                      print("선택한 장소: $selectedLocation");
+                    }
                   },
                 ),
                 const SizedBox(height: 16),
@@ -75,7 +86,8 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)", // "선택" 표시 추가
-                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+                  leadingIcon:
+                      const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
                     // TODO: 캘린더 기능 추가
                   },

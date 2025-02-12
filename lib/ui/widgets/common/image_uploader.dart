@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ImageUploadWidget extends StatelessWidget {
-  const ImageUploadWidget({Key? key}) : super(key: key);
+class ImageUploader extends StatelessWidget {
+  const ImageUploader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
