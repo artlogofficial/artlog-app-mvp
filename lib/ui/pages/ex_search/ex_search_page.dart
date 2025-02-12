@@ -1,8 +1,10 @@
 import 'package:artlog_app_mvp/ui/widgets/common/page_title.dart';
+import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
-import 'package:artlog_app_mvp/ui/widgets/textfields/search_filed.dart'; // 🔹 SearchField 위젯 추가
+import 'package:artlog_app_mvp/ui/widgets/textfields/search_filed.dart'; 
+import 'package:artlog_app_mvp/ui/widgets/buttons/outlined_button.dart';
 
 class ExSearchPage extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class _ExSearchPageState extends State<ExSearchPage> {
   TextEditingController _searchController = TextEditingController(); // 검색 입력 필드 컨트롤러
   List<Map<String, dynamic>> searchResults = []; // 검색 결과 리스트
 
-  /// 전시 검색 함수 (검색어 입력 시 호출)
+  /// 🔹 전시 검색 함수
   void searchExhibitions(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -82,6 +84,61 @@ class _ExSearchPageState extends State<ExSearchPage> {
     });
   }
 
+  /// 🔹 검색 결과가 없을 때 보여줄 UI (중앙 정렬)
+  Widget _buildNoResultsUI() {
+    return Container(
+      width: double.infinity, // 🔹 너비를 화면 전체로 설정
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      decoration: BoxDecoration(color: Color(0xFFF2F2F2)), // 배경 색상 적용
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center, // 🔹 중앙 정렬
+        children: [
+          AppIcons.alert(size: 80, color: Colors.grey), // 🚨 Alert 아이콘 추가
+          const SizedBox(height: 16),
+
+          // 🔹 "검색 결과가 없습니다" 텍스트
+          Text(
+            '검색 결과가 없습니다.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF191919),
+              fontSize: 16,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              height: 1.50,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // 🔹 "찾고 있는 결과가 없다면 직접 등록해 보세요." 안내 텍스트
+          Text(
+            '찾고 있는 결과가 없다면 직접 등록해 보세요.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF5B5B5B),
+              fontSize: 14,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              height: 1.43,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 🖊 "전시정보 등록" 버튼 (OutlinedButtonWidget 사용)
+          OutlinedButtonWidget(
+            text: '전시정보 등록',
+            onPressed: () {
+              // TODO: 전시정보 등록 화면으로 이동하는 기능 추가
+            },
+            borderColor: Color(0xFF222222),
+            textColor: Color(0xFF222222),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,46 +147,51 @@ class _ExSearchPageState extends State<ExSearchPage> {
         type: AppBarType.sub, // 서브 앱바 스타일 적용
         showBackButton: true, 
       ),
-      body: Column(
-        children: [
-          const PageTitle(title: "어떤 전시를 보셨나요?"), // PageTitle 위젯 사용
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchField( // SearchField 위젯 사용
-              controller: _searchController,
+      body: Center( // 🔹 전체 UI 중앙 정렬
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center, // 🔹 모든 요소 중앙 정렬
+          children: [
+            const SizedBox(width: 328, child: PageTitle(title: "어떤 전시를 보셨나요?")), // 🔹 제목도 중앙 정렬
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 328, // 🔹 검색바 너비를 고정하여 정렬 문제 해결
+                child: SearchField(controller: _searchController),
+              ),
             ),
-          ),
-          Expanded(
-            child: searchResults.isEmpty
-                ? Center(child: Text("검색 결과가 없습니다."))
-                : ListView.builder(
-                    itemCount: searchResults.length,
-                    itemBuilder: (context, index) {
-                      var data = searchResults[index];
-                      return ListTile(
-                        leading: Image.network(
-                          data['poster_thumb_url'], // 포스터 이미지 URL
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(
-                          data['title'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(data['artist'], style: TextStyle(color: Colors.grey)), // 작가명
-                            Text(data['gallery_name'], style: TextStyle(color: Colors.grey)), // 갤러리명
-                            Text("~ ${data['end_date']}", style: TextStyle(color: Colors.grey)), // 종료일
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+            Expanded(
+              child: searchResults.isEmpty
+                  ? _buildNoResultsUI() // 🔹 검색 결과 없음 UI 적용
+                  : ListView.builder(
+                      itemCount: searchResults.length,
+                      itemBuilder: (context, index) {
+                        var data = searchResults[index];
+                        return ListTile(
+                          leading: Image.network(
+                            data['poster_thumb_url'], // 포스터 이미지 URL
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            data['title'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['artist'], style: TextStyle(color: Colors.grey)), // 작가명
+                              Text(data['gallery_name'], style: TextStyle(color: Colors.grey)), // 갤러리명
+                              Text("~ ${data['end_date']}", style: TextStyle(color: Colors.grey)), // 종료일
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
