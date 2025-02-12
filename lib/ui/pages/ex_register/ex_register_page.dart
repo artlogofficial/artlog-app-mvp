@@ -1,9 +1,11 @@
+import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
+import 'package:intl/intl.dart'; // 날짜 포맷을 위해 추가
 
 class ExRegisterPage extends StatefulWidget {
   @override
@@ -11,9 +13,10 @@ class ExRegisterPage extends StatefulWidget {
 }
 
 class _ExRegisterPageState extends State<ExRegisterPage> {
-  final TextEditingController exhibitionNameController =
-      TextEditingController();
+  final TextEditingController exhibitionNameController = TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
+
+  String? selectedDateRange; // 선택된 전시 기간을 저장할 상태 변수
 
   @override
   void dispose() {
@@ -52,7 +55,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ),
                 const SizedBox(height: 16),
 
-                // 📌 전시장소 입력 (기존 방식 유지)
+                // 📌 전시장소 입력
                 ExRegisterCard(
                   title: "전시 장소",
                   hintText: "장소명 검색",
@@ -60,12 +63,11 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   onTap: () async {
                     final selectedLocation = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => LocationSearchPage()),
+                      MaterialPageRoute(builder: (context) => LocationSearchPage()),
                     );
 
                     if (selectedLocation != null) {
-                      // TODO: 선택한 장소를 상태에 반영 (ex: setState 사용)
+                      // TODO: 선택한 장소를 상태에 반영
                       print("선택한 장소: $selectedLocation");
                     }
                   },
@@ -75,24 +77,28 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 // 📌 작가명 입력 (TextField, 선택 항목)
                 ExRegisterCard(
                   title: "작가 명",
-                  optionalHint: "(선택)", // "선택" 표시 추가
+                  optionalHint: "(선택)",
                   isTextField: true,
                   hintText: "작가명을 입력하세요",
                   controller: artistNameController,
                 ),
                 const SizedBox(height: 16),
 
-                // 📌 전시기간 입력 (기존 방식 유지)
+                // 📌 전시기간 입력 (날짜 선택 시 업데이트)
                 ExRegisterCard(
                   title: "전시 기간",
-                  optionalHint: "(선택)", // "선택" 표시 추가
-                  leadingIcon:
-                      const Icon(Icons.calendar_today, color: Colors.grey),
+                  optionalHint: "(선택)",
+                  hintText: selectedDateRange ?? "", // 선택된 날짜 표시, 날짜 선택이 없을 시 텍스트 표시 없음
+                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
-                    // TODO: 캘린더 기능 추가
+                    DatePickerBottomSheet.show(context, (startDate, endDate) {
+                      setState(() {
+                        selectedDateRange =
+                            "${DateFormat('yyyy.MM.dd').format(startDate)} - ${DateFormat('yyyy.MM.dd').format(endDate)}"; // 날짜 포맷 설정
+                      });
+                    });
                   },
                 ),
-                const SizedBox(height: 32),
 
                 // 📌 "다음" 버튼 - 중앙 정렬
                 Center(
