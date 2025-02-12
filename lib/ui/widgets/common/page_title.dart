@@ -12,19 +12,27 @@ class PageTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      child: Text(
-        title,
-        textAlign: textAlign, // 적용: 텍스트 정렬 옵션
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w600,
-          height: 1.40,
-          letterSpacing: -0.06,
-        ),
+    return Container(
+      width: 360, // 🔹 너비 설정
+      height: 60, // 🔹 높이 설정
+      alignment: Alignment.centerLeft, // 🔹 텍스트를 항상 왼쪽 정렬
+      padding: const EdgeInsets.all(16), // 🔹 padding 설정 (16px)
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            textAlign: textAlign, // 적용: 텍스트 정렬 옵션
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w600,
+              height: 1.40,
+              letterSpacing: -0.06,
+            ),
+          ),
+        ],
       ),
     );
   }

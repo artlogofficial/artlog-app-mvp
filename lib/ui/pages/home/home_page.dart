@@ -45,7 +45,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Extracted method for body content
   Widget _buildBodyContent() {
     return Container(
       width: double.infinity,
