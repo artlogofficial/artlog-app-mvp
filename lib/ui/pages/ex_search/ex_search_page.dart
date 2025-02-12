@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
+import 'package:artlog_app_mvp/ui/widgets/textfields/search_filed.dart'; // 🔹 SearchField 위젯 추가
 
 class ExSearchPage extends StatefulWidget {
   @override
@@ -92,14 +93,8 @@ class _ExSearchPageState extends State<ExSearchPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
+            child: SearchField( // 🔹 기존 TextField 대신 SearchField 사용
               controller: _searchController,
-              decoration: InputDecoration(
-                hintText: "전시명, 작가명, 갤러리명 검색",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              onChanged: searchExhibitions, // 검색어 입력 시 자동 호출
             ),
           ),
           Expanded(
