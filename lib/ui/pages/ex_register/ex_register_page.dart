@@ -1,11 +1,24 @@
+import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 
-class ExRegisterPage extends StatelessWidget {
+class ExRegisterPage extends StatefulWidget {
+  @override
+  _ExRegisterPageState createState() => _ExRegisterPageState();
+}
+
+class _ExRegisterPageState extends State<ExRegisterPage> {
   final TextEditingController exhibitionNameController = TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    exhibitionNameController.dispose();
+    artistNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +37,8 @@ class ExRegisterPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 24),
 
-                // 📌 사진 추가 영역
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFF7F7F7),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt, size: 32, color: Colors.grey),
-                      const SizedBox(height: 8),
-                      Text(
-                        "사진 추가",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // 📌 사진 추가 / 이미지 업로드 영역
+                ImageUploadWidget(),
                 const SizedBox(height: 24),
 
                 // 📌 전시명 입력 (TextField)
@@ -64,7 +54,7 @@ class ExRegisterPage extends StatelessWidget {
                 ExRegisterCard(
                   title: "전시 장소",
                   hintText: "장소명 검색",
-                  leadingIcon: Icon(Icons.search, color: Colors.grey),
+                  leadingIcon: const Icon(Icons.search, color: Colors.grey),
                   onTap: () {
                     // TODO: 장소 검색 기능 추가
                   },
@@ -85,7 +75,7 @@ class ExRegisterPage extends StatelessWidget {
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)", // "선택" 표시 추가
-                  leadingIcon: Icon(Icons.calendar_today, color: Colors.grey),
+                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
                     // TODO: 캘린더 기능 추가
                   },
