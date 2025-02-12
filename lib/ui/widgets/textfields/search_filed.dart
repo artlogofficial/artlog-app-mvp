@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
   final TextEditingController controller; // 사용자 입력 관리 컨트롤러 
-  
+
   const SearchField({Key? key, required this.controller}) : super(key: key);
 
   @override
@@ -27,35 +27,33 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 328,
+      width: 328, 
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16), 
       decoration: BoxDecoration(
         color: Colors.white, // 항상 흰색 배경 유지
-        borderRadius: BorderRadius.circular(44),
+        borderRadius: BorderRadius.circular(44), 
         border: Border.all(
           color: Color(0xFFD8D8D8), 
-          width: 1,
+          width: 1, 
         ),
       ),
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Icon(
-              Icons.search,
-              color: Color.fromRGBO(138, 138, 138, 1.0), 
-            ),
+          Icon(
+            Icons.search,
+            color: Color.fromRGBO(138, 138, 138, 1.0), // 돋보기 아이콘 색상
           ),
+          const SizedBox(width: 5.5), // 아이콘과 텍스트 필드 사이 간격 (gap: Radius/8)
           Expanded(
             child: TextField(
               controller: widget.controller,
-              cursorColor: Color.fromRGBO(8, 112, 233, 1.0),
+              cursorColor: Color.fromRGBO(8, 112, 233, 1.0), 
               decoration: InputDecoration(
                 hintText: isTyping ? "" : "전시명, 작가명, 갤러리명 검색",
                 border: InputBorder.none,
                 isDense: true, 
-                contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                contentPadding: EdgeInsets.symmetric(vertical: 9), // 세로 정렬 조정
               ),
               style: TextStyle(
                 color: isTyping ? Color(0xFF222222) : Color(0xFF898989), // 입력 여부에 따른 글씨 색상 변경

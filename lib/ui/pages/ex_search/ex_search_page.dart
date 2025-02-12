@@ -1,3 +1,4 @@
+import 'package:artlog_app_mvp/ui/widgets/common/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
@@ -91,9 +92,10 @@ class _ExSearchPageState extends State<ExSearchPage> {
       ),
       body: Column(
         children: [
+          const PageTitle(title: "어떤 전시를 보셨나요?"), // PageTitle 위젯 사용
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SearchField( // 🔹 기존 TextField 대신 SearchField 사용
+            child: SearchField( // SearchField 위젯 사용
               controller: _searchController,
             ),
           ),
