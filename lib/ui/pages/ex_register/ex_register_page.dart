@@ -1,4 +1,3 @@
-
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
@@ -14,7 +13,8 @@ class ExRegisterPage extends StatefulWidget {
 }
 
 class _ExRegisterPageState extends State<ExRegisterPage> {
-  final TextEditingController exhibitionNameController = TextEditingController();
+  final TextEditingController exhibitionNameController =
+      TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
 
   DateTime? selectedStartDate; // 시작 날짜 상태 추가
@@ -62,7 +62,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   hintText: "전시명을 입력하세요",
                   controller: exhibitionNameController,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
                 // 📌 전시장소 입력
                 ExRegisterCard(
@@ -72,7 +72,8 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   onTap: () async {
                     final selectedLocation = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LocationSearchPage()),
+                      MaterialPageRoute(
+                          builder: (context) => LocationSearchPage()),
                     );
 
                     if (selectedLocation != null) {
@@ -80,7 +81,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                     }
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
                 // 📌 작가명 입력 (TextField, 선택 항목)
                 ExRegisterCard(
@@ -90,14 +91,15 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   hintText: "작가명을 입력하세요",
                   controller: artistNameController,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
                 // 📌 전시기간 입력 (날짜 선택 시 업데이트)
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
                   hintText: formattedDateRange, // 선택된 날짜 표시
-                  leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+                  leadingIcon:
+                      const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
                     DatePickerBottomSheet.show(
                       context,
@@ -112,6 +114,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                     );
                   },
                 ),
+                const SizedBox(height: 24),
 
                 // "다음" 버튼 - 중앙 정렬
                 Center(
