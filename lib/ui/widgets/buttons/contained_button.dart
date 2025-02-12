@@ -10,39 +10,36 @@ class ContainedButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onPressed,
-    this.backgroundColor = const Color(0xFF00E068), 
-    this.textColor = const Color(0xFF222222), 
+    this.backgroundColor = const Color(0xFF00E068),
+    this.textColor = const Color(0xFF222222),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox( // SizedBox로 버튼 크기 고정
       width: 328,
       height: 52,
-      decoration: ShapeDecoration(
-        color: backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
       child: TextButton(
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 18),
+          backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          padding: EdgeInsets.zero, 
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Color(0xFF222222),
-            fontSize: 18,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            height: 1.33,
-            letterSpacing: -0.2,
+        child: Center( // 텍스트를 중앙 정렬
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF222222),
+              fontSize: 18,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w600,
+              height: 1.33,
+              letterSpacing: -0.2,
+            ),
           ),
         ),
       ),
