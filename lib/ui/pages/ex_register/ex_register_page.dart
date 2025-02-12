@@ -1,3 +1,4 @@
+
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
-import 'package:intl/intl.dart'; // 날짜 포맷을 위해 추가
+import 'package:intl/intl.dart';
 
 class ExRegisterPage extends StatefulWidget {
   @override
@@ -16,7 +17,15 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
   final TextEditingController exhibitionNameController = TextEditingController();
   final TextEditingController artistNameController = TextEditingController();
 
-  String? selectedDateRange; // 선택된 전시 기간을 저장할 상태 변수
+  DateTime? selectedStartDate; // 🟢 시작 날짜 상태 추가
+  DateTime? selectedEndDate; // 🟢 종료 날짜 상태 추가
+
+  String get formattedDateRange {
+    if (selectedStartDate != null && selectedEndDate != null) {
+      return "${DateFormat('yyyy.MM.dd').format(selectedStartDate!)} - ${DateFormat('yyyy.MM.dd').format(selectedEndDate!)}";
+    }
+    return ""; // 선택 전에는 빈 값
+  }
 
   @override
   void dispose() {
@@ -67,7 +76,6 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                     );
 
                     if (selectedLocation != null) {
-                      // TODO: 선택한 장소를 상태에 반영
                       print("선택한 장소: $selectedLocation");
                     }
                   },
@@ -88,15 +96,20 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 ExRegisterCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
-                  hintText: selectedDateRange ?? "", // 선택된 날짜 표시, 날짜 선택이 없을 시 텍스트 표시 없음
+                  hintText: formattedDateRange, // 🟢 선택된 날짜 표시
                   leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                   onTap: () {
-                    DatePickerBottomSheet.show(context, (startDate, endDate) {
-                      setState(() {
-                        selectedDateRange =
-                            "${DateFormat('yyyy.MM.dd').format(startDate)} - ${DateFormat('yyyy.MM.dd').format(endDate)}"; // 날짜 포맷 설정
-                      });
-                    });
+                    DatePickerBottomSheet.show(
+                      context,
+                      selectedStartDate, // 🟢 기존 시작 날짜 전달
+                      selectedEndDate, // 🟢 기존 종료 날짜 전달
+                      (startDate, endDate) {
+                        setState(() {
+                          selectedStartDate = startDate;
+                          selectedEndDate = endDate;
+                        });
+                      },
+                    );
                   },
                 ),
 

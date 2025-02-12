@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DatePickerBottomSheet {
-  static void show(BuildContext context, Function(DateTime, DateTime) onDateSelected) {
+  static void show(BuildContext context, DateTime? initialStartDate, DateTime? initialEndDate, Function(DateTime, DateTime) onDateSelected) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, 
@@ -26,9 +26,12 @@ class DatePickerBottomSheet {
                 ),
                 const SizedBox(height: 16),
 
-                Expanded( // 스크롤 가능하게 변경
+                Expanded(
                   child: SfDateRangePicker(
                     selectionMode: DateRangePickerSelectionMode.range,
+                    initialSelectedRange: initialStartDate != null && initialEndDate != null
+                        ? PickerDateRange(initialStartDate, initialEndDate) // 🟢 기존 선택 값 유지
+                        : null,
                     onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
                       if (args.value is PickerDateRange) {
                         final DateTime? startDate = args.value.startDate;
