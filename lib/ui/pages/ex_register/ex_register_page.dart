@@ -1,6 +1,6 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
-import 'package:artlog_app_mvp/ui/pages/now_create/now_create_page.dart';
+import 'package:artlog_app_mvp/ui/pages/now_create/now_create_checkin_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
