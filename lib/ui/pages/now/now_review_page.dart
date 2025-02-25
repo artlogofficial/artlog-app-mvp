@@ -1,3 +1,4 @@
+import 'package:artlog_app_mvp/ui/pages/archive/archive_timeline_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/%08common_card.dart';
 import 'package:flutter/material.dart';
@@ -288,6 +289,12 @@ class _NowReviewPageState extends State<NowReviewPage> {
               onPressed: () {
                 print(
                     "저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArchiveTimelinePage(),
+                  ),
+                );
               },
             ),
             SizedBox(height: 24),
