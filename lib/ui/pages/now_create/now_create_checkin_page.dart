@@ -1,4 +1,5 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
+import 'package:artlog_app_mvp/ui/pages/now_create/now_create_review_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
@@ -7,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:intl/intl.dart';
 
-class NowCreatePage extends StatefulWidget {
+class NowCreateCheckinPage extends StatefulWidget {
   @override
   _NowCreatePageState createState() => _NowCreatePageState();
 }
 
-class _NowCreatePageState extends State<NowCreatePage> {
+class _NowCreatePageState extends State<NowCreateCheckinPage> {
   DateTime? selectedCheckInDate; // 체크인 날짜 상태 변수
   String selectedPerson = "혼자"; // 함께한 사람 기본값
 
@@ -202,9 +203,9 @@ class _NowCreatePageState extends State<NowCreatePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => NowCreatePage(),
-                    ),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NowCreateReviewPage()),
                   );
                 },
               ),

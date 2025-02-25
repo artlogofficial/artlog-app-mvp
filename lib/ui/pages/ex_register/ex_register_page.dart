@@ -134,7 +134,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                NowCreatePage()), // 전시 감상 기록 페이지로 이동
+                                NowCreateCheckinPage()), // 전시 감상 기록 페이지로 이동
                       );
                     },
                   ),
