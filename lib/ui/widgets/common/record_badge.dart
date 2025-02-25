@@ -9,7 +9,6 @@ class RecordBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 상태별 스타일 매핑
     final Map<RecordBadgeType, Map<String, dynamic>> styles = {
       RecordBadgeType.deep: {
         "label": "DEEP",
