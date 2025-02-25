@@ -1,6 +1,6 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
-import 'package:artlog_app_mvp/ui/pages/now_create/now_create_checkin_page.dart';
+import 'package:artlog_app_mvp/ui/pages/now/now_checkin_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
@@ -134,7 +134,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                NowCreateCheckinPage()), // 전시 감상 기록 페이지로 이동
+                                NowCheckinPage()), // 전시 감상 기록 페이지로 이동
                       );
                     },
                   ),

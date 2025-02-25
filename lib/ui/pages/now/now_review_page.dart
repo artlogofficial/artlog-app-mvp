@@ -6,13 +6,13 @@ import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart'; // 별점 위젯 추가
 
-class NowCreateReviewPage extends StatefulWidget {
+class NowReviewPage extends StatefulWidget {
   @override
-  _NowCreateReviewPageState createState() => _NowCreateReviewPageState();
+  _NowReviewPageState createState() => _NowReviewPageState();
 }
 
-class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
-  int selectedRating = 0; // 기본 별점 값
+class _NowReviewPageState extends State<NowReviewPage> {
+  int selectedRating = 4; // 기본 별점 값
   final TextEditingController inspirationController = TextEditingController();
   bool isShared = true; // 공유 체크 여부
   List<String> uploadedImages = []; // 업로드된 이미지 리스트
