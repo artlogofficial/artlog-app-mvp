@@ -14,6 +14,16 @@ class NowCreatePage extends StatefulWidget {
 
 class _NowCreatePageState extends State<NowCreatePage> {
   DateTime? selectedCheckInDate; // 체크인 날짜 상태 변수
+  String selectedPerson = "혼자"; // 함께한 사람 기본값
+
+  final List<String> options = [
+    "혼자",
+    "친구와",
+    "연인과",
+    "가족과",
+    "동료와",
+    "모임에서"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +33,10 @@ class _NowCreatePageState extends State<NowCreatePage> {
         type: AppBarType.sub,
         showBackButton: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView( // 스크롤 가능하도록 변경
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // 사진 업로드 위젯 추가
             Center(child: ImageUploader()),
@@ -35,7 +46,6 @@ class _NowCreatePageState extends State<NowCreatePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: 20),
                 Text(
                   'Fish & Chips',
                   textAlign: TextAlign.center,
@@ -96,25 +106,94 @@ class _NowCreatePageState extends State<NowCreatePage> {
             ExRegisterCard(
               title: "체크인",
               hintText: selectedCheckInDate != null
-                  ? DateFormat('yyyy.MM.dd').format(selectedCheckInDate!) // 선택된 날짜 표시
-                  : "방문일자", // 기본 텍스트
-              hasValue: selectedCheckInDate != null, // 값이 있으면 검정색 적용
-              leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey), // 아이콘 추가
+                  ? DateFormat('yyyy.MM.dd').format(selectedCheckInDate!)
+                  : "방문일자",
+              hasValue: selectedCheckInDate != null,
+              leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey),
               onTap: () {
                 DatePickerBottomSheet.show(
                   context,
                   initialDate: selectedCheckInDate,
                   onDateSelected: (selected, _) {
                     setState(() {
-                      selectedCheckInDate = selected; // 선택한 날짜 저장
+                      selectedCheckInDate = selected;
                     });
                   },
-                  isSingleSelection: true, // 하루만 선택 가능
+                  isSingleSelection: true,
                 );
               },
             ),
             const SizedBox(height: 24),
 
+            // 함께한 사람 선택 UI
+            Container(
+              width: 328,
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 상단 제목
+                  const Text(
+                    '함께한 사람',
+                    style: TextStyle(
+                      color: Color(0xFF222222),
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 선택 옵션 (라디오 버튼, 한 줄에 3개씩)
+                  Wrap(
+                    spacing: 20, // 버튼 간격 조정
+                    runSpacing: 12, // 줄바꿈 간격 조정
+                    alignment: WrapAlignment.center,
+                    children: options.map((option) {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width / 3 - 24, // 한 줄에 3개 정렬
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedPerson = option;
+                            });
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Radio<String>(
+                                value: option,
+                                groupValue: selectedPerson,
+                                activeColor: const Color(0xFF0770E8), // 선택된 버튼 색상 적용
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    selectedPerson = value!;
+                                  });
+                                },
+                              ),
+                              Text(
+                                option,
+                                style: const TextStyle(
+                                  color: Color(0xFF222222),
+                                  fontSize: 16,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
 
             // 다음 버튼
             Center(
@@ -130,6 +209,7 @@ class _NowCreatePageState extends State<NowCreatePage> {
                 },
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
