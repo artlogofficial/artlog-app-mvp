@@ -1,9 +1,11 @@
+import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
+import 'package:intl/intl.dart';
 
 class NowCreatePage extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class NowCreatePage extends StatefulWidget {
 }
 
 class _NowCreatePageState extends State<NowCreatePage> {
+  DateTime? selectedCheckInDate; // 체크인 날짜 상태 변수
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +30,8 @@ class _NowCreatePageState extends State<NowCreatePage> {
             // 사진 업로드 위젯 추가
             Center(child: ImageUploader()),
             SizedBox(height: 16),
+
+            // 전시 정보
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -85,13 +91,31 @@ class _NowCreatePageState extends State<NowCreatePage> {
               ],
             ),
             SizedBox(height: 24),
-                // 체크인 날짜 입력
-                ExRegisterCard(
-                  title: "체크인",
-                  isTextField: true,
-                  hintText: "방문일자",
-                ),
-                const SizedBox(height: 10),
+
+            // 체크인 날짜 입력 (하루만 선택 가능)
+            ExRegisterCard(
+              title: "체크인",
+              hintText: selectedCheckInDate != null
+                  ? DateFormat('yyyy.MM.dd').format(selectedCheckInDate!) // 선택된 날짜 표시
+                  : "방문일자", // 기본 텍스트
+              hasValue: selectedCheckInDate != null, // 값이 있으면 검정색 적용
+              leadingIcon: const Icon(Icons.calendar_today, color: Colors.grey), // 아이콘 추가
+              onTap: () {
+                DatePickerBottomSheet.show(
+                  context,
+                  initialDate: selectedCheckInDate,
+                  onDateSelected: (selected, _) {
+                    setState(() {
+                      selectedCheckInDate = selected; // 선택한 날짜 저장
+                    });
+                  },
+                  isSingleSelection: true, // 하루만 선택 가능
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+
+
             // 다음 버튼
             Center(
               child: ContainedButton(
@@ -100,8 +124,8 @@ class _NowCreatePageState extends State<NowCreatePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            NowCreatePage()), // 전시 감상 기록 페이지로 이동
+                      builder: (context) => NowCreatePage(),
+                    ),
                   );
                 },
               ),

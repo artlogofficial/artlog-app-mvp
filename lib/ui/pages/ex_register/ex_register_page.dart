@@ -111,14 +111,15 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   onTap: () {
                     DatePickerBottomSheet.show(
                       context,
-                      selectedStartDate,
-                      selectedEndDate,
-                      (startDate, endDate) {
+                      initialStartDate: selectedStartDate,
+                      initialEndDate: selectedEndDate,
+                      onDateSelected: (startDate, endDate) {
                         setState(() {
                           selectedStartDate = startDate;
                           selectedEndDate = endDate;
                         });
                       },
+                      isSingleSelection: false, // 전시 기간 선택이므로 false 유지
                     );
                   },
                 ),

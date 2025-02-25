@@ -4,11 +4,13 @@ import 'package:intl/intl.dart';
 
 class DatePickerBottomSheet {
   static void show(
-    BuildContext context,
+    BuildContext context, {
+    DateTime? initialDate, // 하루 선택 모드일 때 사용
     DateTime? initialStartDate,
     DateTime? initialEndDate,
-    Function(DateTime, DateTime) onDateSelected,
-  ) {
+    required Function(DateTime, DateTime?) onDateSelected,
+    bool isSingleSelection = false, // 하루만 선택할 수 있는지 여부
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -17,6 +19,7 @@ class DatePickerBottomSheet {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
+        DateTime? selectedDate = initialDate;
         DateTime? selectedStart = initialStartDate;
         DateTime? selectedEnd = initialEndDate;
 
@@ -36,11 +39,15 @@ class DatePickerBottomSheet {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // 선택된 날짜 표시 (굵게)
+                    // 선택된 날짜 표시
                     Text(
-                      (selectedStart != null && selectedEnd != null)
-                          ? "${DateFormat('yyyy.MM.dd').format(selectedStart!)} - ${DateFormat('yyyy.MM.dd').format(selectedEnd!)}"
-                          : "날짜를 선택하세요",
+                      isSingleSelection
+                          ? (selectedDate != null
+                              ? DateFormat('yyyy.MM.dd').format(selectedDate!)
+                              : "날짜를 선택하세요")
+                          : (selectedStart != null && selectedEnd != null
+                              ? "${DateFormat('yyyy.MM.dd').format(selectedStart!)} - ${DateFormat('yyyy.MM.dd').format(selectedEnd!)}"
+                              : "날짜를 선택하세요"),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -50,8 +57,11 @@ class DatePickerBottomSheet {
 
                     Expanded(
                       child: SfDateRangePicker(
-                        selectionMode: DateRangePickerSelectionMode.range,
-                        initialSelectedRange: selectedStart != null && selectedEnd != null
+                        selectionMode: isSingleSelection
+                            ? DateRangePickerSelectionMode.single
+                            : DateRangePickerSelectionMode.range,
+                        initialSelectedDate: isSingleSelection ? selectedDate : null,
+                        initialSelectedRange: !isSingleSelection && selectedStart != null && selectedEnd != null
                             ? PickerDateRange(selectedStart, selectedEnd)
                             : null,
                         backgroundColor: Colors.white,
@@ -59,13 +69,13 @@ class DatePickerBottomSheet {
                           firstDayOfWeek: 1,
                         ),
                         selectionColor: const Color(0xFF00E068),
-                        rangeSelectionColor: const Color(0xFF99F0B0),
                         startRangeSelectionColor: const Color(0xFF00E068),
                         endRangeSelectionColor: const Color(0xFF00E068),
-                        headerHeight: 50, // 헤더 높이 조정
+                        rangeSelectionColor: const Color(0xFF99F0B0),
+                        headerHeight: 50,
                         headerStyle: const DateRangePickerHeaderStyle(
                           backgroundColor: Colors.white,
-                          textAlign: TextAlign.center, // 텍스트 중앙 정렬
+                          textAlign: TextAlign.center,
                           textStyle: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -73,16 +83,16 @@ class DatePickerBottomSheet {
                           ),
                         ),
                         navigationDirection: DateRangePickerNavigationDirection.horizontal,
-                        monthFormat: 'M월', 
+                        monthFormat: 'M월',
                         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                          if (args.value is PickerDateRange) {
-                            final DateTime? startDate = args.value.startDate;
-                            final DateTime? endDate = args.value.endDate;
-                            setState(() {
-                              selectedStart = startDate;
-                              selectedEnd = endDate;
-                            });
-                          }
+                          setState(() {
+                            if (isSingleSelection) {
+                              selectedDate = args.value as DateTime;
+                            } else if (args.value is PickerDateRange) {
+                              selectedStart = args.value.startDate;
+                              selectedEnd = args.value.endDate;
+                            }
+                          });
                         },
                       ),
                     ),
@@ -90,7 +100,7 @@ class DatePickerBottomSheet {
                     const SizedBox(height: 16),
 
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.6, // 확인 버튼 길이 조정
+                      width: MediaQuery.of(context).size.width * 0.6,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF00E068),
@@ -100,7 +110,10 @@ class DatePickerBottomSheet {
                           ),
                         ),
                         onPressed: () {
-                          if (selectedStart != null && selectedEnd != null) {
+                          if (isSingleSelection && selectedDate != null) {
+                            onDateSelected(selectedDate!, null);
+                            Navigator.pop(context);
+                          } else if (!isSingleSelection && selectedStart != null && selectedEnd != null) {
                             onDateSelected(selectedStart!, selectedEnd!);
                             Navigator.pop(context);
                           } else {
