@@ -1,6 +1,6 @@
-import 'package:artlog_app_mvp/ui/pages/archive/archive_timeline_page.dart';
+import 'package:artlog_app_mvp/ui/pages/archive/archive_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
-import 'package:artlog_app_mvp/ui/widgets/cards/%08common_card.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/input_card.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
@@ -292,7 +292,7 @@ class _NowReviewPageState extends State<NowReviewPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ArchiveTimelinePage(),
+                    builder: (context) => ArchivePage(),
                   ),
                 );
               },

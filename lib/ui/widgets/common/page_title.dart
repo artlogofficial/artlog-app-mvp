@@ -13,10 +13,10 @@ class PageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 360, // 🔹 너비 설정
-      height: 60, // 🔹 높이 설정
-      alignment: Alignment.centerLeft, // 🔹 텍스트를 항상 왼쪽 정렬
-      padding: const EdgeInsets.all(16), // 🔹 padding 설정 (16px)
+      width: 360, // 너비 설정
+      height: 60, // 높이 설정
+      alignment: Alignment.centerLeft, // 텍스트를 항상 왼쪽 정렬
+      padding: const EdgeInsets.all(16), // padding 설정 (16px)
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
