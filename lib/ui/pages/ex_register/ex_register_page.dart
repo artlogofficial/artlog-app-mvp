@@ -4,7 +4,7 @@ import 'package:artlog_app_mvp/ui/pages/now_create/now_create_checkin_page.dart'
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
-import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/%08common_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +58,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 24),
 
                 // 전시명 입력 (TextField)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 명",
                   isTextField: true,
                   hintText: "전시명을 입력하세요",
@@ -67,7 +67,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 전시장소 입력 (선택 시 검정색 표시)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 장소",
                   hintText: selectedLocation ?? "장소명 검색",
                   hasValue: selectedLocation != null, // 값이 있으면 검정색 적용
@@ -89,7 +89,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 작가명 입력 (TextField, 선택 항목)
-                ExRegisterCard(
+                CommonCard(
                   title: "작가 명",
                   optionalHint: "(선택)",
                   isTextField: true,
@@ -99,7 +99,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 전시기간 입력 (선택 시 검정색 표시)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
                   hintText: formattedDateRange.isNotEmpty

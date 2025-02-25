@@ -1,7 +1,7 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/now_create/now_create_review_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
-import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/%08common_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class _NowCreatePageState extends State<NowCreateCheckinPage> {
             SizedBox(height: 24),
 
             // 체크인 날짜 입력 (하루만 선택 가능)
-            ExRegisterCard(
+            CommonCard(
               title: "체크인",
               hintText: selectedCheckInDate != null
                   ? DateFormat('yyyy.MM.dd').format(selectedCheckInDate!)

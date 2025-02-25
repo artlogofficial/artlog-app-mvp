@@ -1,7 +1,7 @@
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/%08common_card.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
-import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
 
@@ -14,6 +14,21 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
   int selectedRating = 4; // 기본 별점 값
   final TextEditingController inspirationController = TextEditingController();
   bool isShared = true; // 공유 체크 여부
+  List<String> uploadedImages = []; // 업로드된 이미지 리스트
+
+  void _addImage(String imagePath) {
+    if (uploadedImages.length < 3) {
+      setState(() {
+        uploadedImages.add(imagePath);
+      });
+    }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      uploadedImages.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +39,11 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
         showBackButton: true,
       ),
       body: SingleChildScrollView(
-        // 스크롤 가능하도록 변경
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 사진 업로드 위젯 추가
+            // 사진 업로드 위젯
             Center(child: ImageUploader()),
             SizedBox(height: 16),
 
@@ -94,26 +108,32 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
             SizedBox(height: 24),
 
             // 내 취향 별점
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
+            CommonCard(
+              title: "내 취향 별점",
               child: Column(
                 children: [
-                  Text(
-                    "내 취향 별점",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 8),
-                  RatingWidget(
-                    initialRating: selectedRating,
-                    onRatingChanged: (newRating) {
-                      setState(() {
-                        selectedRating = newRating;
-                      });
-                    },
+                  SizedBox(
+                    width: 272,
+                    height: 48,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(5, (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedRating = index + 1;
+                            });
+                          },
+                          child: Icon(
+                            Icons.star,
+                            size: 48,
+                            color: index < selectedRating
+                                ? Color(0xFFFFBC22) // 채워진 별 색상
+                                : Color(0xFFE0E0E0), // 빈 별 색상
+                          ),
+                        );
+                      }),
+                    ),
                   ),
                   SizedBox(height: 8),
                   Text("💙 이런 전시만 하면 좋겠다!! 💙"),
@@ -122,38 +142,82 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
             ),
             SizedBox(height: 24),
 
-            // 영감 메모 입력
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+            // 작품, 공간, 나 (사진 추가)
+            CommonCard(
+              title: "작품, 공간, 나",
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  ...uploadedImages.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String image = entry.value;
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(image, width: 90, height: 90, fit: BoxFit.cover),
+                        ),
+                        Positioned(
+                          right: 4,
+                          top: 4,
+                          child: GestureDetector(
+                            onTap: () => _removeImage(index),
+                            child: Icon(Icons.cancel, size: 20, color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                  if (uploadedImages.length < 3)
+                    GestureDetector(
+                      onTap: () => _addImage("https://via.placeholder.com/90"),
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(Icons.camera_alt, color: Colors.grey[600]),
+                      ),
+                    ),
+                ],
               ),
+            ),
+            SizedBox(height: 24),
+
+            // 나만의 특별한 영감 한줄 (회색 박스 사용, 세로 길이 증가)
+            CommonCard(
+              title: "나만의 특별한 영감 한줄",
+              isTextField: true,
+              hintText: "나의 영감을 한 줄로 기록하고 오래 기억하세요.",
+              controller: inspirationController,
+              hasValue: inspirationController.text.isNotEmpty,
               child: TextField(
                 controller: inspirationController,
                 maxLength: 100,
+                maxLines: 3,
                 decoration: InputDecoration(
                   hintText: "나의 영감을 한 줄로 기록하고 오래 기억하세요.",
                   border: InputBorder.none,
+                  counterText: "",
                 ),
               ),
             ),
             SizedBox(height: 24),
 
             // 공유 체크박스
-            Row(
-              children: [
-                Checkbox(
-                  value: isShared,
-                  activeColor: Colors.green,
-                  onChanged: (value) {
-                    setState(() {
-                      isShared = value!;
-                    });
-                  },
-                ),
-                Text("영감 공유하기"),
-              ],
+            CheckboxListTile(
+              value: isShared,
+              activeColor: const Color(0xFF0770E8),
+              onChanged: (value) {
+                setState(() {
+                  isShared = value!;
+                });
+              },
+              title: Text("영감 공유하기"),
+              controlAffinity: ListTileControlAffinity.leading,
             ),
             SizedBox(height: 24),
 
@@ -161,8 +225,7 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
             ContainedButton(
               text: "저장",
               onPressed: () {
-                print(
-                    "저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
+                print("저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
               },
             ),
             SizedBox(height: 24),
