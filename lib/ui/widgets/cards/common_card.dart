@@ -9,7 +9,7 @@ class CommonCard extends StatelessWidget {
   final bool isTextField; // TextField 여부 추가
   final TextEditingController? controller; // TextField 컨트롤러 추가
   final bool hasValue; // 값이 입력되었는지 확인
-  final Widget? child; // 🔹 추가된 부분: 내부에 커스텀 UI를 넣을 수 있도록 개선
+  final Widget? child; //  내부에 커스텀 UI를 넣을 수 있도록 개선
 
   const CommonCard({
     Key? key,
@@ -21,7 +21,7 @@ class CommonCard extends StatelessWidget {
     this.isTextField = false,
     this.controller,
     this.hasValue = false,
-    this.child, // 🔹 추가된 부분
+    this.child, 
   }) : super(key: key);
 
   @override
@@ -106,7 +106,7 @@ class CommonCard extends StatelessWidget {
                 ),
               ),
             )
-          else if (child != null) // 🔹 추가된 부분 (사용자가 원하는 위젯을 넣을 수 있음)
+          else if (child != null) // 사용자가 원하는 위젯을 넣을 수 있음
             child!
           else
             GestureDetector(

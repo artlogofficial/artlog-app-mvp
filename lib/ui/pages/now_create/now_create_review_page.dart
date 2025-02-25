@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
+import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart'; // 별점 위젯 추가
 
 class NowCreateReviewPage extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class NowCreateReviewPage extends StatefulWidget {
 }
 
 class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
-  int selectedRating = 4; // 기본 별점 값
+  int selectedRating = 0; // 기본 별점 값
   final TextEditingController inspirationController = TextEditingController();
   bool isShared = true; // 공유 체크 여부
   List<String> uploadedImages = []; // 업로드된 이미지 리스트
@@ -107,40 +108,36 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
             ),
             SizedBox(height: 24),
 
-            // 내 취향 별점
+            // 내 취향 별점 (RatingWidget 적용)
             CommonCard(
               title: "내 취향 별점",
               child: Column(
                 children: [
-                  SizedBox(
-                    width: 272,
-                    height: 48,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(5, (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedRating = index + 1;
-                            });
-                          },
-                          child: Icon(
-                            Icons.star,
-                            size: 48,
-                            color: index < selectedRating
-                                ? Color(0xFFFFBC22) // 채워진 별 색상
-                                : Color(0xFFE0E0E0), // 빈 별 색상
-                          ),
-                        );
-                      }),
-                    ),
+                  RatingWidget(
+                    initialRating: selectedRating,
+                    starSize: 48,
+                    onRatingChanged: (newRating) {
+                      setState(() {
+                        selectedRating = newRating;
+                      });
+                    },
                   ),
                   SizedBox(height: 8),
-                  Text("💙 이런 전시만 하면 좋겠다!! 💙"),
+                  Text(
+                    "💙 이런 전시만 하면 좋겠다!! 💙",
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      height: 1.5,
+                      letterSpacing: 0,
+                      color: Color(0xFF222222),
+                    ),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 8),
 
             // 작품, 공간, 나 (사진 추가)
             CommonCard(
@@ -156,14 +153,16 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.network(image, width: 90, height: 90, fit: BoxFit.cover),
+                          child: Image.network(image,
+                              width: 90, height: 90, fit: BoxFit.cover),
                         ),
                         Positioned(
                           right: 4,
                           top: 4,
                           child: GestureDetector(
                             onTap: () => _removeImage(index),
-                            child: Icon(Icons.cancel, size: 20, color: Colors.red),
+                            child:
+                                Icon(Icons.cancel, size: 20, color: Colors.red),
                           ),
                         ),
                       ],
@@ -185,39 +184,101 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
                 ],
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 8),
 
-            // 나만의 특별한 영감 한줄 (회색 박스 사용, 세로 길이 증가)
+            // 나만의 특별한 영감 한줄
             CommonCard(
               title: "나만의 특별한 영감 한줄",
-              isTextField: true,
-              hintText: "나의 영감을 한 줄로 기록하고 오래 기억하세요.",
-              controller: inspirationController,
-              hasValue: inspirationController.text.isNotEmpty,
-              child: TextField(
-                controller: inspirationController,
-                maxLength: 100,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  hintText: "나의 영감을 한 줄로 기록하고 오래 기억하세요.",
-                  border: InputBorder.none,
-                  counterText: "",
+              child: Container(
+                width: double.infinity,
+                height: 120,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: inspirationController,
+                        maxLength: 100,
+                        maxLines: null, // 여러 줄 입력 가능
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                            hintText: "나의 영감을 한 줄로 기록하고 \n오래 기억하세요.",
+                            hintStyle: TextStyle(
+                              color: Color(0xFF9E9E9E),
+                              fontSize: 16,
+                            ),
+                            border: InputBorder.none,
+                            counterStyle: TextStyle(
+                              // 글자 카운터 스타일 조정(0/100)
+                              color: Color(0xFF9E9E9E),
+                              fontSize: 12,
+                            )),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 8),
 
-            // 공유 체크박스
-            CheckboxListTile(
-              value: isShared,
-              activeColor: const Color(0xFF0770E8),
-              onChanged: (value) {
-                setState(() {
-                  isShared = value!;
-                });
-              },
-              title: Text("영감 공유하기"),
-              controlAffinity: ListTileControlAffinity.leading,
+            // 공유 체크 UI (세로 정렬 수정)
+            Container(
+              width: 328,
+              height: 83,
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // 텍스트와 체크박스를 위쪽 정렬
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2), // 체크박스를 살짝 내림
+                    child: Checkbox(
+                      value: isShared,
+                      activeColor: const Color(0xFF0770E8),
+                      materialTapTargetSize:
+                          MaterialTapTargetSize.shrinkWrap, // 크기 조정
+                      visualDensity: VisualDensity.compact, // 체크박스 크기 축소
+                      onChanged: (value) {
+                        setState(() {
+                          isShared = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 12), // 체크박스와 텍스트 사이 간격 조정
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '영감 공유하기',
+                        style: TextStyle(
+                          color: Color(0xFF222222),
+                          fontSize: 16,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w600,
+                          height: 1.50,
+                        ),
+                      ),
+                      SizedBox(height: 4), // 문구 사이 간격 조정
+                      Text(
+                        '체크하면 다른 사람들이 볼 수 있어요.',
+                        style: TextStyle(
+                          color: Color(0xFF5B5B5B),
+                          fontSize: 14,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          height: 1.50,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 24),
 
@@ -225,7 +286,8 @@ class _NowCreateReviewPageState extends State<NowCreateReviewPage> {
             ContainedButton(
               text: "저장",
               onPressed: () {
-                print("저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
+                print(
+                    "저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
               },
             ),
             SizedBox(height: 24),
