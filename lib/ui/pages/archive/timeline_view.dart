@@ -1,20 +1,23 @@
-import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
-import 'package:artlog_app_mvp/ui/widgets/cards/record_card.dart'; // 수정된 RecordCard
 import 'package:flutter/material.dart';
+import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/record_card.dart';
 
 class TimelineView extends StatefulWidget {
+  const TimelineView({Key? key}) : super(key: key);
+
   @override
   _TimelineViewState createState() => _TimelineViewState();
 }
 
 class _TimelineViewState extends State<TimelineView> {
-  // 임시 기록 데이터 - 날짜별로 그룹화
+  // 날짜별로 그룹화된 임시 기록 데이터
   final Map<String, List<Map<String, dynamic>>> groupedRecords = {
     '2025 JAN 10': [
       {
         'type': RecordBadgeType.now,
         'title': 'Fish & Chips',
-        'description': '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
+        'description':
+            '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
         'rating': 5,
         'imageUrl': 'https://picsum.photos/id/237/200/300',
       },
@@ -23,7 +26,8 @@ class _TimelineViewState extends State<TimelineView> {
       {
         'type': RecordBadgeType.now,
         'title': 'Fish & Chips',
-        'description': '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
+        'description':
+            '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
         'rating': 5,
         'imageUrl': 'https://picsum.photos/id/237/200/300',
       },
@@ -32,7 +36,8 @@ class _TimelineViewState extends State<TimelineView> {
       {
         'type': RecordBadgeType.look,
         'title': '인간, 물질 그리고 변형',
-        'description': '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
+        'description':
+            '마치 심해 속 바다에서 내가 유영하고 있는 듯한 느낌을 받는다. 고요하고 선명한 구조의 아름다움을 본 오늘의 멋은 완성되었다.',
         'rating': 5,
         'imageUrl': 'https://picsum.photos/id/237/200/300',
       },
@@ -41,91 +46,109 @@ class _TimelineViewState extends State<TimelineView> {
 
   @override
   Widget build(BuildContext context) {
-    // 날짜 키를 리스트로 변환하여 순서대로 처리
+    // 날짜 키를 추출하여 리스트로 변환
     final dateKeys = groupedRecords.keys.toList();
 
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: dateKeys.length,
-      itemBuilder: (context, dateIndex) {
-        final date = dateKeys[dateIndex];
-        final records = groupedRecords[date]!;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 날짜 표시
-            Padding(
-              padding: const EdgeInsets.only(top: 16, bottom: 8),
-              child: _buildDateHeader(date),
-            ),
-            // 해당 날짜의 기록들을 RecordCard 위젯으로 표시
-            ...records.map((record) {
-              return _buildRecordCard(record);
-            }).toList(),
-
-            // 마지막 날짜가 아니면 구분선 또는 간격 추가
-            if (dateIndex < dateKeys.length - 1)
-              SizedBox(height: 16),
-          ],
-        );
-      },
-    );
-  }
-
-  // 날짜 헤더 위젯
-  Widget _buildDateHeader(String date) {
-    final parts = date.split(' ');
-    final year = parts[0];
-    final month = parts[1];
-    final day = parts[2];
-
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              year,
-              style: TextStyle(
-                color: Color(0xFF5B5B5B),
-                fontSize: 12,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Text(
-              month,
-              style: TextStyle(
-                color: Color(0xFF5B5B5B),
-                fontSize: 12,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Text(
-              day,
-              style: TextStyle(
-                color: Color(0xFF222222),
-                fontSize: 14,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+    // ListView.builder → 세로 스크롤 가능, 오버플로우 방지
+    return Center( // 전체 ListView를 화면 중앙에 정렬
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 450), // 최대 너비 설정
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          itemCount: dateKeys.length,
+          itemBuilder: (context, dateIndex) {
+            final date = dateKeys[dateIndex];        // 예: "2025 JAN 10"
+            final records = groupedRecords[date]!;   // 해당 날짜의 기록들
+    
+            // 예: "2025 JAN 10" → ["2025", "JAN", "10"]
+            final parts = date.split(' ');
+            final year = parts[0];
+            final month = parts[1];
+            final day = parts[2];
+    
+            // 날짜별로 여러 RecordCard를 표시
+            return Column(
+              children: [
+                // records.map(...) → 날짜에 속한 모든 Record를 생성
+                ...records.map((record) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // (A) 날짜 텍스트 (왼쪽)
+                        SizedBox(
+                          width: 40,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                year, // 예: "2025"
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFF222222),
+                                  fontSize: 11,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                month, // 예: "JAN"
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'DungGeunMo',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.20,
+                                  letterSpacing: -0.06,
+                                ),
+                              ),
+                              Text(
+                                day, // 예: "10"
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFF222222),
+                                  fontSize: 18,
+                                  fontFamily: 'DungGeunMo',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              // 점 추가
+                              Container(
+                                width: 4,
+                                height: 4,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF222222),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+    
+                        // (B) RecordCard (오른쪽)
+                        Expanded(
+                          child: RecordCard(
+                            type: record['type'],
+                            title: record['title'],
+                            description: record['description'],
+                            imageUrl: record['imageUrl'],
+                            rating: record['rating'],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ],
+            );
+          },
         ),
-      ],
-    );
-  }
-
-  // 수정된 RecordCard만 단순 반환
-  Widget _buildRecordCard(Map<String, dynamic> record) {
-    return RecordCard(
-      type: record['type'],
-      title: record['title'],
-      description: record['description'],
-      imageUrl: record['imageUrl'],
-      rating: record['rating'],
+      ),
     );
   }
 }

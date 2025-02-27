@@ -3,7 +3,7 @@ import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart';
 
 class RecordCard extends StatelessWidget {
-  final RecordBadgeType type; 
+  final RecordBadgeType type; // 뱃지 타입 (NOW, LOOK, DEEP)
   final String title;
   final String description;
   final String imageUrl;
@@ -21,7 +21,8 @@ class RecordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12.0),
+      // 상단 패딩 제거 -> 날짜와 정확히 같은 높이에서 시작 가능
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200),
@@ -36,13 +37,14 @@ class RecordCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  RecordBadge(type: type), // 뱃지
+                  RecordBadge(type: type),
                   const SizedBox(width: 8),
                   RatingWidget(
                     initialRating: rating,
                     starSize: 16,
                     starSpacing: 2,
                     onRatingChanged: (newRating) {
+                      // 예시: print만
                       print('별점이 $newRating로 변경됨');
                     },
                   ),
@@ -57,6 +59,7 @@ class RecordCard extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
 
           // (2) 하단 Row: 이미지 + (제목, 설명) 텍스트
           Row(
@@ -67,16 +70,16 @@ class RecordCard extends StatelessWidget {
                 width: 60,
                 height: 86,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
                   image: DecorationImage(
                     image: NetworkImage(imageUrl),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
               const SizedBox(width: 12),
 
-              // 텍스트 영역 (제목, 코멘트)
+              // 텍스트 영역 (제목, 설명)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +99,7 @@ class RecordCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
 
-                    // 코멘트
+                    // 설명: 세 줄 고정, 173 x 62
                     SizedBox(
                       width: 173,
                       height: 62,
