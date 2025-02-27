@@ -3,7 +3,7 @@ import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart';
 
 class RecordCard extends StatelessWidget {
-  final RecordBadgeType type; // 뱃지 타입 (NOW, LOOK, DEEP)
+  final RecordBadgeType type; 
   final String title;
   final String description;
   final String imageUrl;
@@ -21,76 +21,102 @@ class RecordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Card 대신 Container 사용, elevation 제거
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        // 필요하다면 경계선 or 배경색 등 추가
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200),
         ),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 이미지
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              imageUrl,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
+          // (1) 상단 Row: 배지 + 별점 + 점 세 개 아이콘
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  RecordBadge(type: type), // 뱃지
+                  const SizedBox(width: 8),
+                  RatingWidget(
+                    initialRating: rating,
+                    starSize: 16,
+                    starSpacing: 2,
+                    onRatingChanged: (newRating) {
+                      print('별점이 $newRating로 변경됨');
+                    },
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: const Icon(Icons.more_horiz),
+                onPressed: () {
+                  // TODO: 점 3개 눌렀을 때 실행될 로직
+                  print('점 3개 아이콘 클릭됨');
+                },
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
 
-          // 텍스트 + 배지/별점
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 배지 + 별점 Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // (2) 하단 Row: 이미지 + (제목, 설명) 텍스트
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 이미지
+              Container(
+                width: 60,
+                height: 86,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(width: 12),
+
+              // 텍스트 영역 (제목, 코멘트)
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    RecordBadge(type: type), // 뱃지
-                    RatingWidget(
-                      initialRating: rating,
-                      starSize: 16,
-                      starSpacing: 2,
-                      onRatingChanged: (newRating) {
-                        // 현재는 로직 없이 print만
-                        print('별점이 $newRating로 변경됨');
-                      },
+                    // 제목
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Color(0xFF222222),
+                        fontSize: 16,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w600,
+                        height: 1.50,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+
+                    // 코멘트
+                    SizedBox(
+                      width: 173,
+                      height: 62,
+                      child: Text(
+                        description,
+                        style: const TextStyle(
+                          color: Color(0xFF5B5B5B),
+                          fontSize: 14,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          height: 1.50,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-
-                // 제목
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-
-                // 설명
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF5B5B5B),
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
