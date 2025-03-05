@@ -50,7 +50,7 @@ class _TimelineViewState extends State<TimelineView> {
     final dateKeys = groupedRecords.keys.toList();
 
     // ListView.builder → 세로 스크롤 가능, 오버플로우 방지
-    return Center( // 전체 ListView를 화면 중앙에 정렬
+    return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 450), // 최대 너비 설정
         child: ListView.builder(
@@ -59,22 +59,22 @@ class _TimelineViewState extends State<TimelineView> {
           itemBuilder: (context, dateIndex) {
             final date = dateKeys[dateIndex];        // 예: "2025 JAN 10"
             final records = groupedRecords[date]!;   // 해당 날짜의 기록들
-    
+
             // 예: "2025 JAN 10" → ["2025", "JAN", "10"]
             final parts = date.split(' ');
             final year = parts[0];
             final month = parts[1];
             final day = parts[2];
-    
+
             // 날짜별로 여러 RecordCard를 표시
             return Column(
               children: [
-                // records.map(...) → 날짜에 속한 모든 Record를 생성
                 ...records.map((record) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 24),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.baseline, // 날짜와 RecordCard를 같은 높이로 정렬
+                      textBaseline: TextBaseline.alphabetic, // 텍스트 기준선 맞추기
                       children: [
                         // (A) 날짜 텍스트 (왼쪽)
                         SizedBox(
@@ -91,6 +91,7 @@ class _TimelineViewState extends State<TimelineView> {
                                   fontSize: 11,
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
+                                  height: 1.2,
                                 ),
                               ),
                               Text(
@@ -101,7 +102,7 @@ class _TimelineViewState extends State<TimelineView> {
                                   fontSize: 20,
                                   fontFamily: 'DungGeunMo',
                                   fontWeight: FontWeight.w400,
-                                  height: 1.20,
+                                  height: 1.2,
                                   letterSpacing: -0.06,
                                 ),
                               ),
@@ -113,6 +114,7 @@ class _TimelineViewState extends State<TimelineView> {
                                   fontSize: 18,
                                   fontFamily: 'DungGeunMo',
                                   fontWeight: FontWeight.w400,
+                                  height: 1.2,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -129,7 +131,7 @@ class _TimelineViewState extends State<TimelineView> {
                           ),
                         ),
                         const SizedBox(width: 16),
-    
+
                         // (B) RecordCard (오른쪽)
                         Expanded(
                           child: RecordCard(
