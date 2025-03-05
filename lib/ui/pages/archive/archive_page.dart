@@ -33,66 +33,93 @@ class _ArchivePageState extends State<ArchivePage> {
     );
   }
 
-  // 정렬 옵션 선택 버튼 (PopupMenuButton 사용)
+  // 정렬 옵션 선택 버튼 (PopupMenuButton)
   Widget _buildSortMenu() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          // 정렬 옵션 표시 + 팝업 메뉴
-          PopupMenuButton<String>(
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text(
-                  _sortOption,
-                  style: const TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    height: 21 / 14, // line-height 계산 (21px ÷ 14px)
-                    letterSpacing: 0, // letter-spacing: 0%
-                    color: Color.fromRGBO(92, 92, 92,
-                        1), // UIColor(red: 0.36, green: 0.36, blue: 0.36, alpha: 1) 변환
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16), // PageTitle과 정렬
+      child: Container(
+        height: 48, // 고정된 높이
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: Colors.black.withOpacity(0.1), // 아래 테두리만 적용
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            // 정렬 옵션 표시 + 팝업 메뉴
+            PopupMenuButton<String>(
+              color: Colors.white,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                decoration: ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                const Icon(Icons.keyboard_arrow_down,
-                    color: Color.fromRGBO(138, 138, 138, 1)),
+                child: Row(
+                  children: [
+                    Text(
+                      _sortOption,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        height: 21 / 14, // line-height 계산
+                        letterSpacing: 0,
+                        color: Color(0xFF5B5B5B),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.keyboard_arrow_down, color: Color(0xFF5B5B5B)),
+                  ],
+                ),
+              ),
+              onSelected: (String newValue) {
+                setState(() {
+                  _sortOption = newValue;
+                });
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem(
+                  value: '최신 등록순',
+                  child: Text('최신 등록순'),
+                ),
+                const PopupMenuItem(
+                  value: '오래된순',
+                  child: Text('오래된순'),
+                ),
+                const PopupMenuItem(
+                  value: '별점 높은순',
+                  child: Text('별점 높은순'),
+                ),
               ],
             ),
-            onSelected: (String newValue) {
-              setState(() {
-                _sortOption = newValue;
-              });
-            },
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(
-                value: '최신 등록순',
-                child: Text('최신 등록순'),
-              ),
-              const PopupMenuItem(
-                value: '오래된순',
-                child: Text('오래된순'),
-              ),
-              const PopupMenuItem(
-                value: '별점 높은순',
-                child: Text('별점 높은순'),
-              ),
-            ],
-          ),
-          const Spacer(),
 
-          // 리스트/그리드 뷰 전환 버튼
-          IconButton(
-            icon: Icon(_isListView ? Icons.view_list : Icons.calendar_month),
-            color: const Color.fromRGBO(179, 179, 179, 1),
-            onPressed: () {
-              setState(() {
-                _isListView = !_isListView;
-              });
-            },
-          ),
-        ],
+            // Spacer를 추가하여 오른쪽 버튼을 끝으로 이동
+            const Spacer(),
+
+            // 타임라인-캘린더 뷰 전환 버튼 (오른쪽 끝 정렬)
+            Container(
+              width: 24,
+              height: 24,
+              child: IconButton(
+                icon: Icon(_isListView ? Icons.view_list : Icons.calendar_month),
+                color: const Color.fromRGBO(179, 179, 179, 1),
+                padding: EdgeInsets.zero, // 버튼 크기 조정
+                constraints: const BoxConstraints(), // 아이콘 크기 조정
+                onPressed: () {
+                  setState(() {
+                    _isListView = !_isListView;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -109,11 +136,9 @@ class _ArchivePageState extends State<ArchivePage> {
             title: "나만의 예술취향 아카이브",
             textAlign: TextAlign.left,
           ),
-          // 정렬 옵션과 보기 방식 전환 버튼
-          _buildSortMenu(),
-          // 구분선
-          const Divider(height: 1, color: Color(0xFFEFEFEF)),
-          // 타임라인 뷰 또는 그리드 뷰
+          // 정렬 옵션과 보기 방식 전환 버튼 (아래 테두리 적용)
+          _buildSortMenu(), // PageTitle과 정렬됨
+          // 타임라인 뷰 또는 캘린더 뷰
           Expanded(
             child: _isListView
                 ? TimelineView()
