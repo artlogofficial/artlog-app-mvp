@@ -47,13 +47,17 @@ class _ArchivePageState extends State<ArchivePage> {
                 Text(
                   _sortOption,
                   style: const TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: 14,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    height: 21 / 14, // line-height 계산 (21px ÷ 14px)
+                    letterSpacing: 0, // letter-spacing: 0%
+                    color: Color.fromRGBO(92, 92, 92,
+                        1), // UIColor(red: 0.36, green: 0.36, blue: 0.36, alpha: 1) 변환
                   ),
                 ),
-                const Icon(Icons.keyboard_arrow_down, color: Color(0xFF222222)),
+                const Icon(Icons.keyboard_arrow_down,
+                    color: Color.fromRGBO(138, 138, 138, 1)),
               ],
             ),
             onSelected: (String newValue) {
@@ -81,6 +85,7 @@ class _ArchivePageState extends State<ArchivePage> {
           // 리스트/그리드 뷰 전환 버튼
           IconButton(
             icon: Icon(_isListView ? Icons.view_list : Icons.calendar_month),
+            color: const Color.fromRGBO(179, 179, 179, 1),
             onPressed: () {
               setState(() {
                 _isListView = !_isListView;
