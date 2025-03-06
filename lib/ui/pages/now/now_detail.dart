@@ -237,7 +237,7 @@ class _NowDetailPageState extends State<NowDetailPage> {
               title: "나만의 특별한 영감 한줄",
               child: Container(
                 width: double.infinity,
-                height: 120,
+                height: 150,
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Color(0xFFF7F7F7),
