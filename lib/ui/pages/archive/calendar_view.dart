@@ -185,7 +185,7 @@ class _CalendarViewState extends State<CalendarView> {
                 // 간소화된 방식으로 마커 표시
                 if (_hasRecordsForDay(date)) {
                   return Positioned(
-                    bottom: 1,
+                    bottom: -2,
                     left: 0,
                     right: 0,
                     child: Center(
