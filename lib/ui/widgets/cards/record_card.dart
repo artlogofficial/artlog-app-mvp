@@ -1,9 +1,10 @@
+import 'package:artlog_app_mvp/ui/widgets/modals/action_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart';
 
 class RecordCard extends StatelessWidget {
-  final RecordBadgeType type; // 뱃지 타입 (NOW, LOOK, DEEP)
+  final RecordBadgeType type;
   final String title;
   final String description;
   final String imageUrl;
@@ -21,7 +22,6 @@ class RecordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // 상단 패딩 제거 -> 날짜와 정확히 같은 높이에서 시작 가능
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       decoration: BoxDecoration(
         border: Border(
@@ -31,7 +31,7 @@ class RecordCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // (1) 상단 Row: 배지 + 별점 + 점 세 개 아이콘
+          // 상단 Row: 배지 + 별점 + 점 세 개 아이콘
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -44,7 +44,6 @@ class RecordCard extends StatelessWidget {
                     starSize: 16,
                     starSpacing: 2,
                     onRatingChanged: (newRating) {
-                      // 예시: print만
                       print('별점이 $newRating로 변경됨');
                     },
                   ),
@@ -53,19 +52,17 @@ class RecordCard extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.more_horiz),
                 onPressed: () {
-                  // TODO: 점 3개 눌렀을 때 실행될 로직
-                  print('점 3개 아이콘 클릭됨');
+                  _showActionMenu(context);
                 },
               ),
             ],
           ),
           const SizedBox(height: 8),
 
-          // (2) 하단 Row: 이미지 + (제목, 설명) 텍스트
+          // 하단 Row: 이미지 + (제목, 설명) 텍스트
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 이미지
               Container(
                 width: 60,
                 height: 86,
@@ -79,12 +76,10 @@ class RecordCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
 
-              // 텍스트 영역 (제목, 설명)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 제목
                     Text(
                       title,
                       style: const TextStyle(
@@ -99,7 +94,6 @@ class RecordCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
 
-                    // 설명: 세 줄 고정, 173 x 62
                     SizedBox(
                       width: 173,
                       height: 62,
@@ -123,6 +117,29 @@ class RecordCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  // BottomSheet 호출 메서드
+  void _showActionMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      builder: (context) {
+        return ActionMenu(
+          onEdit: () {
+            print("기록 수정 화면으로 이동");
+          },
+          onDelete: () {
+            print("기록이 삭제됨");
+          },
+        );
+      },
     );
   }
 }
