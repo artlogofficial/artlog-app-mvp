@@ -13,7 +13,7 @@ class ArchivePage extends StatefulWidget {
 
 class _ArchivePageState extends State<ArchivePage> {
   int _currentIndex = 1; // 아카이브 탭 인덱스
-  bool _isListView = true; // 목록 보기 상태 (true: 리스트, false: 그리드)
+  bool _isListView = true; // 목록 보기 상태 (true: 리스트, false: 캘린더)
   String _sortOption = '최신 등록순'; // 정렬 옵션 기본값
 
   void _onTabTapped(int index) {
@@ -40,12 +40,14 @@ class _ArchivePageState extends State<ArchivePage> {
       child: Container(
         height: 48, // 고정된 높이
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: 1,
-              color: Colors.black.withOpacity(0.1), // 아래 테두리만 적용
-            ),
-          ),
+          border: _isListView
+              ? Border(
+                  bottom: BorderSide(
+                    width: 1,
+                    color: Colors.black.withOpacity(0.1), // 리스트뷰일 때만 테두리 추가
+                  ),
+                )
+              : null, // CalendarView일 때는 테두리 제거
         ),
         child: Row(
           children: [
@@ -142,7 +144,7 @@ class _ArchivePageState extends State<ArchivePage> {
           Expanded(
             child: _isListView
                 ? TimelineView()
-                : CalendarView(), // <-- 새로 만든 CalendarView 위젯
+                : CalendarView(), // CalendarView일 때는 아래 테두리 없음
           ),
         ],
       ),
