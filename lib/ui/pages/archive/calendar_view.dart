@@ -17,39 +17,82 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime _focusedDay = DateTime.now();
   bool _isInitialized = false;
 
-  // 날짜별 기록 데이터 (예제)
-  final Map<DateTime, List<Map<String, dynamic>>> records = {
-    DateTime(2025, 2, 6): [
-      {
-        'type': RecordBadgeType.now,
-        'title': 'Fish & Chips',
-        'description': '바다에서 유영하는 느낌을 받았다. 오늘의 멋은 완성되었다.',
-        'rating': 5,
-        'imageUrl': 'https://picsum.photos/id/237/200/300',
-      },
-    ],
-    DateTime(2025, 2, 4): [
-      {
-        'type': RecordBadgeType.look,
-        'title': '인간, 물질 그리고 변형',
-        'description': '심해 속 바다에서 내가 유영하는 듯한 느낌을 받았다.',
-        'rating': 5,
-        'imageUrl': 'https://picsum.photos/id/238/200/300',
-      },
-    ],
-  };
+  // null 허용으로 변경하고 late 키워드 제거
+  Map<String, List<Map<String, dynamic>>>? _recordsByDateString;
 
   @override
   void initState() {
     super.initState();
     _initializeLocale();
+    _initializeRecords();
   }
 
+  void _initializeRecords() {
+    // 문자열 키를 사용하여 날짜 비교 문제 해결
+    _recordsByDateString = {
+      _dateToString(DateTime(2025, 3, 10)): [
+        {
+          'type': RecordBadgeType.now,
+          'title': '빛과 공간',
+          'description': '전시장에서 빛이 공간을 가르는 순간을 포착했다.',
+          'rating': 4,
+          'imageUrl': 'https://picsum.photos/id/239/200/300',
+        },
+      ],
+      _dateToString(DateTime(2025, 3, 9)): [
+        {
+          'type': RecordBadgeType.now,
+          'title': '추상과 감성',
+          'description': '색과 형태의 조합이 주는 감각적인 표현을 경험했다.',
+          'rating': 5,
+          'imageUrl': 'https://picsum.photos/id/240/200/300',
+        },
+      ],
+      _dateToString(DateTime(2025, 3, 8)): [
+        {
+          'type': RecordBadgeType.look,
+          'title': '인간, 물질 그리고 변형',
+          'description': '물질의 변화를 탐구하는 전시에서 깊은 인상을 받았다.',
+          'rating': 5,
+          'imageUrl': 'https://picsum.photos/id/241/200/300',
+        },
+      ],
+    };
+    
+    // 초기화 시 데이터 디버깅
+    _recordsByDateString?.forEach((key, value) {
+      print('날짜 키: $key, 기록 수: ${value.length}');
+    });
+  }
+
+  // 날짜를 문자열로 변환 (yyyy-MM-dd 형식)
+  String _dateToString(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  // 로컬라이제이션을 초기화하여 날짜 포맷을 올바르게 표시
   Future<void> _initializeLocale() async {
     await initializeDateFormatting('ko_KR', null);
     setState(() {
       _isInitialized = true;
     });
+  }
+
+  // 선택된 날짜의 기록 가져오기
+  List<Map<String, dynamic>> _getRecordsForSelectedDay() {
+    if (_recordsByDateString == null) return [];
+    
+    final dateString = _dateToString(_selectedDay);
+    print('선택된 날짜 키: $dateString');
+    return _recordsByDateString![dateString] ?? [];
+  }
+
+  // 특정 날짜에 기록이 있는지 확인
+  bool _hasRecordsForDay(DateTime day) {
+    if (_recordsByDateString == null) return false;
+    
+    final dateString = _dateToString(day);
+    return _recordsByDateString!.containsKey(dateString);
   }
 
   @override
@@ -60,11 +103,11 @@ class _CalendarViewState extends State<CalendarView> {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Color.fromRGBO(255, 255, 255, 1), // 배경색 변경 (흰색)
+        color: Color.fromRGBO(255, 255, 255, 1),
       ),
       child: Column(
         children: [
-          // 달력 UI
+          // 캘린더 UI
           TableCalendar(
             firstDay: DateTime.utc(2020, 1, 1),
             lastDay: DateTime.utc(2030, 12, 31),
@@ -72,40 +115,46 @@ class _CalendarViewState extends State<CalendarView> {
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
-                _selectedDay = selectedDay;
+                // 선택된 날짜 정보 출력
+                print('선택한 날짜: ${selectedDay.year}-${selectedDay.month}-${selectedDay.day}');
+                
+                // 시간 정보를 제거하여 날짜만 저장
+                _selectedDay = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
                 _focusedDay = focusedDay;
+                
+                // 선택 후 기록 정보 확인
+                final records = _getRecordsForSelectedDay();
+                print('선택된 날짜의 기록 수: ${records.length}');
               });
             },
             calendarFormat: CalendarFormat.month,
-            locale: 'ko_KR', // 한국어 요일 표시
+            locale: 'ko_KR',
 
-            // 헤더 스타일 (2025년 2월)
+            // 캘린더 헤더 스타일 (예: 2025년 3월)
             headerStyle: HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
               titleTextFormatter: (date, locale) =>
                   DateFormat('yyyy년 M월', 'ko_KR').format(date),
               titleTextStyle: const TextStyle(
-                fontFamily: 'Pretendard', 
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
-                height: 1.0, 
+                height: 1.0,
                 letterSpacing: 0,
                 color: Colors.black,
               ),
-              leftChevronIcon:
-                  const Icon(Icons.chevron_left, color: Colors.grey),
-              rightChevronIcon:
-                  const Icon(Icons.chevron_right, color: Colors.grey),
+              leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.grey),
+              rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.grey),
             ),
 
-            // 달력 스타일 수정 (선택되지 않은 날짜 UI 변경 없음)
+            // 캘린더 내부 스타일
             calendarStyle: CalendarStyle(
               tablePadding: const EdgeInsets.symmetric(horizontal: 16),
-              outsideDaysVisible: false, 
-              cellMargin: const EdgeInsets.all(6), 
+              outsideDaysVisible: false,
+              cellMargin: const EdgeInsets.all(6),
               todayDecoration: const BoxDecoration(
-                color: Colors.transparent, 
+                color: Colors.transparent, // 오늘 날짜의 배경 없음
                 shape: BoxShape.circle,
               ),
               todayTextStyle: const TextStyle(
@@ -113,10 +162,8 @@ class _CalendarViewState extends State<CalendarView> {
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
-
-              // 선택된 날짜 색상 변경
               selectedDecoration: const BoxDecoration(
-                color: Color.fromRGBO(8, 112, 232, 1), 
+                color: Color.fromRGBO(8, 112, 232, 1), // 선택된 날짜 배경색
                 shape: BoxShape.circle,
               ),
               selectedTextStyle: const TextStyle(
@@ -126,31 +173,48 @@ class _CalendarViewState extends State<CalendarView> {
               ),
             ),
 
-            // 요일 스타일 수정
+            // 요일 스타일
             daysOfWeekStyle: const DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-              weekendStyle: TextStyle(
-                fontSize: 14,
-                color: Colors.black, 
-                fontWeight: FontWeight.w500,
-              ),
+              weekdayStyle: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w500),
+              weekendStyle: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w500),
+            ),
+            
+            // 이벤트 표시 마커
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, date, events) {
+                // 간소화된 방식으로 마커 표시
+                if (_hasRecordsForDay(date)) {
+                  return Positioned(
+                    bottom: 1,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(8, 112, 232, 1),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return null;
+              },
             ),
           ),
 
           const SizedBox(height: 16),
 
-          // 선택된 날짜의 기록들 (기록이 없으면 빈 메시지 표시)
+          // 선택된 날짜의 기록 목록
           Expanded(
-            child: records[_selectedDay]?.isNotEmpty ?? false
+            child: _getRecordsForSelectedDay().isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: records[_selectedDay]!.length,
+                    itemCount: _getRecordsForSelectedDay().length,
                     itemBuilder: (context, index) {
-                      final record = records[_selectedDay]![index];
+                      final record = _getRecordsForSelectedDay()[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: RecordCard(
