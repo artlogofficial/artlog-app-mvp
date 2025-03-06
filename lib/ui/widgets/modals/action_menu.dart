@@ -1,3 +1,4 @@
+import 'package:artlog_app_mvp/ui/pages/now/now_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/modals/delete_dialog.dart';
 
@@ -50,8 +51,8 @@ class ActionMenu extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
-              onEdit();
+              Navigator.pop(context); // 모달 닫기
+              // 수정 로직 추가 예정
             },
           ),
 
@@ -69,7 +70,7 @@ class ActionMenu extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pop(context); // 먼저 액션 메뉴 닫기
+              Navigator.pop(context); // 모달 닫기
               showDialog(
                 context: context,
                 barrierDismissible: true, // 바깥 클릭 시 닫기
