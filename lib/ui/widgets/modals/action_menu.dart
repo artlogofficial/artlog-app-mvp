@@ -5,11 +5,13 @@ import 'package:artlog_app_mvp/ui/widgets/modals/delete_dialog.dart';
 class ActionMenu extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final Map<String, dynamic> recordData; // 수정할 데이터 추가
 
   const ActionMenu({
     Key? key,
     required this.onEdit,
     required this.onDelete,
+    required this.recordData, // 파라미터 추가
   }) : super(key: key);
 
   @override
@@ -52,7 +54,17 @@ class ActionMenu extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pop(context); // 모달 닫기
-              // 수정 로직 추가 예정
+              
+              // NowEditPage로 이동하며 데이터 전달
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NowEditPage(recordData: recordData),
+                ),
+              );
+              
+              // 추가로 콜백 실행 (필요한 경우)
+              onEdit();
             },
           ),
 

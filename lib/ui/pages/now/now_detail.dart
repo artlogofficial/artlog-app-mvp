@@ -5,18 +5,53 @@ import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:artlog_app_mvp/ui/widgets/icons/icon_widgets.dart';
-import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart'; // 별점 위젯 추가
+import 'package:artlog_app_mvp/ui/widgets/common/rating_widget.dart';
 
-class NowReviewPage extends StatefulWidget {
+enum RecordMode { create, edit }
+
+class NowDetailPage extends StatefulWidget {
+  final RecordMode mode;
+  final Map<String, dynamic>? initialData; // 수정 모드일 때 초기 데이터
+
+  const NowDetailPage({
+    Key? key,
+    required this.mode,
+    this.initialData,
+  }) : super(key: key);
+
   @override
-  _NowReviewPageState createState() => _NowReviewPageState();
+  _NowDetailPageState createState() => _NowDetailPageState();
 }
 
-class _NowReviewPageState extends State<NowReviewPage> {
-  int selectedRating = 4; // 기본 별점 값
-  final TextEditingController inspirationController = TextEditingController();
-  bool isShared = true; // 공유 체크 여부
-  List<String> uploadedImages = []; // 업로드된 이미지 리스트
+class _NowDetailPageState extends State<NowDetailPage> {
+  late int selectedRating;
+  late TextEditingController inspirationController;
+  late bool isShared;
+  late List<String> uploadedImages;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // 수정 모드면 초기 데이터로 필드 초기화, 아니면 기본값 사용
+    if (widget.mode == RecordMode.edit && widget.initialData != null) {
+      selectedRating = widget.initialData!['rating'] ?? 4;
+      inspirationController = TextEditingController(text: widget.initialData!['inspiration'] ?? '');
+      isShared = widget.initialData!['isShared'] ?? true;
+      uploadedImages = List<String>.from(widget.initialData!['images'] ?? []);
+    } else {
+      selectedRating = 4;
+      inspirationController = TextEditingController();
+      isShared = true;
+      uploadedImages = [];
+    }
+  }
+
+  @override
+  void dispose() {
+    inspirationController.dispose();
+    super.dispose();
+  }
 
   void _addImage(String imagePath) {
     if (uploadedImages.length < 3) {
@@ -32,11 +67,21 @@ class _NowReviewPageState extends State<NowReviewPage> {
     });
   }
 
+  // 페이지 제목 가져오기
+  String get _pageTitle {
+    return widget.mode == RecordMode.create ? "NOW 기록" : "NOW 수정";
+  }
+
+  // 버튼 텍스트 가져오기
+  String get _buttonText {
+    return widget.mode == RecordMode.create ? "저장" : "완료";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "NOW 기록",
+        title: _pageTitle,
         type: AppBarType.sub,
         showBackButton: true,
       ),
@@ -283,12 +328,24 @@ class _NowReviewPageState extends State<NowReviewPage> {
             ),
             SizedBox(height: 24),
 
-            // 저장 버튼
+            // 저장/완료 버튼
             ContainedButton(
-              text: "저장",
+              text: _buttonText,
               onPressed: () {
-                print(
-                    "저장됨 - 별점: $selectedRating, 메모: ${inspirationController.text}, 공유: $isShared");
+                // 저장 또는 수정 로직 처리
+                final recordData = {
+                  'rating': selectedRating,
+                  'inspiration': inspirationController.text,
+                  'isShared': isShared,
+                  'images': uploadedImages,
+                };
+                
+                if (widget.mode == RecordMode.create) {
+                  print("저장됨: $recordData");
+                } else {
+                  print("수정됨: $recordData");
+                }
+                
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

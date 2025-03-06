@@ -1,5 +1,5 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
-import 'package:artlog_app_mvp/ui/pages/now/now_review_page.dart';
+import 'package:artlog_app_mvp/ui/pages/now/now_create_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:artlog_app_mvp/ui/widgets/cards/input_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
@@ -205,7 +205,7 @@ class _NowCheckinPageState extends State<NowCheckinPage> {
                     context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                NowReviewPage()),
+                                NowCreatePage()),
                   );
                 },
               ),

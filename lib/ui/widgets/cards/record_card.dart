@@ -122,6 +122,18 @@ class RecordCard extends StatelessWidget {
 
   // BottomSheet 호출 메서드
   void _showActionMenu(BuildContext context) {
+    // 현재 카드의 데이터를 맵으로 구성
+    final Map<String, dynamic> recordData = {
+      'type': type,
+      'title': title,
+      'description': description,
+      'imageUrl': imageUrl,
+      'rating': rating,
+      'isShared': true, // 기본값 제공
+      'images': [imageUrl], // 현재 이미지를 기본으로 설정
+      'inspiration': description, // 설명을 영감으로 사용
+    };
+    
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -132,6 +144,7 @@ class RecordCard extends StatelessWidget {
       ),
       builder: (context) {
         return ActionMenu(
+          recordData: recordData, // 여기에 방금 생성한 데이터 전달
           onEdit: () {
             print("기록 수정 화면으로 이동");
           },
