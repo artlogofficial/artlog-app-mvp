@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:artlog_app_mvp/ui/widgets/modals/delete_dialog.dart';
 
 class ActionMenu extends StatelessWidget {
   final VoidCallback onEdit;
@@ -36,9 +37,9 @@ class ActionMenu extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // 수정하기 버튼 (여백 추가)
+          // 수정하기 버튼
           ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 24), // 좌우 여백 추가
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
             leading: const Icon(Icons.edit, color: Colors.black),
             title: const Text(
               "수정하기",
@@ -54,9 +55,9 @@ class ActionMenu extends StatelessWidget {
             },
           ),
 
-          // 삭제하기 버튼 (여백 추가)
+          // 삭제하기 버튼 (삭제 다이얼로그 사용)
           ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 24), // 좌우 여백 추가
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
             leading: const Icon(Icons.delete, color: Colors.red),
             title: const Text(
               "삭제하기",
@@ -68,8 +69,17 @@ class ActionMenu extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
-              onDelete();
+              Navigator.pop(context); // 먼저 액션 메뉴 닫기
+              showDialog(
+                context: context,
+                barrierDismissible: true, // 바깥 클릭 시 닫기
+                builder: (context) => DeleteDialog(
+                  onDelete: () {
+                    Navigator.pop(context); // 다이얼로그 닫기
+                    onDelete(); // 삭제 로직 실행
+                  },
+                ),
+              );
             },
           ),
 
