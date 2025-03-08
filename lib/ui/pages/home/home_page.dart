@@ -2,7 +2,7 @@ import 'package:artlog_app_mvp/ui/widgets/navigation/bottom_navigation.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/page_title.dart';
 import 'package:flutter/material.dart';
-import 'package:artlog_app_mvp/ui/pages/ex_search/ex_search_page.dart'; // ✅ ExSearchPage import 추가
+import 'package:artlog_app_mvp/ui/pages/ex_search/ex_search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Extracted method for custom app bar
+  // 앱바위젯 사용
   PreferredSizeWidget _buildCustomAppBar() {
     return CustomAppBar(
       type: AppBarType.main,

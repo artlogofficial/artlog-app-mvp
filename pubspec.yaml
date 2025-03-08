@@ -39,6 +39,7 @@ dependencies:
   kakao_flutter_sdk: ^1.9.6
   firebase_auth: ^5.4.1
   syncfusion_flutter_datepicker: ^28.2.5
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:

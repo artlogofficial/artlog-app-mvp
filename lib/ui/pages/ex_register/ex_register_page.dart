@@ -1,10 +1,10 @@
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_date_%08selection_sheet.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_register/ex_location_search_page.dart';
-import 'package:artlog_app_mvp/ui/pages/now_create/now_create_page.dart';
+import 'package:artlog_app_mvp/ui/pages/now/now_checkin_page.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
-import 'package:artlog_app_mvp/ui/widgets/cards/ex_register_card.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/input_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/buttons/contained_button.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +58,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 24),
 
                 // 전시명 입력 (TextField)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 명",
                   isTextField: true,
                   hintText: "전시명을 입력하세요",
@@ -67,7 +67,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 전시장소 입력 (선택 시 검정색 표시)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 장소",
                   hintText: selectedLocation ?? "장소명 검색",
                   hasValue: selectedLocation != null, // 값이 있으면 검정색 적용
@@ -89,7 +89,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 작가명 입력 (TextField, 선택 항목)
-                ExRegisterCard(
+                CommonCard(
                   title: "작가 명",
                   optionalHint: "(선택)",
                   isTextField: true,
@@ -99,7 +99,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                 const SizedBox(height: 10),
 
                 // 전시기간 입력 (선택 시 검정색 표시)
-                ExRegisterCard(
+                CommonCard(
                   title: "전시 기간",
                   optionalHint: "(선택)",
                   hintText: formattedDateRange.isNotEmpty
@@ -111,14 +111,15 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                   onTap: () {
                     DatePickerBottomSheet.show(
                       context,
-                      selectedStartDate,
-                      selectedEndDate,
-                      (startDate, endDate) {
+                      initialStartDate: selectedStartDate,
+                      initialEndDate: selectedEndDate,
+                      onDateSelected: (startDate, endDate) {
                         setState(() {
                           selectedStartDate = startDate;
                           selectedEndDate = endDate;
                         });
                       },
+                      isSingleSelection: false, // 전시 기간 선택이므로 false 유지
                     );
                   },
                 ),
@@ -133,7 +134,7 @@ class _ExRegisterPageState extends State<ExRegisterPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                NowCreatePage()), // 전시 감상 기록 페이지로 이동
+                                NowCheckinPage()), // 전시 감상 기록 페이지로 이동
                       );
                     },
                   ),
