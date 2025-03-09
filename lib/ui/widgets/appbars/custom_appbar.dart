@@ -2,7 +2,7 @@ import 'package:artlog_app_mvp/ui/widgets/common/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum AppBarType { main, sub, subWithBtn }
+enum AppBarType { main, sub, subWithBtn, settings } // 'settings' 타입 추가
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -12,6 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? buttonText;
   final VoidCallback? onButtonPressed;
   final VoidCallback? onAlarmPressed;
+  final VoidCallback? onSettingsPressed;
 
   const CustomAppBar({
     Key? key,
@@ -22,6 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.buttonText,
     this.onButtonPressed,
     this.onAlarmPressed,
+    this.onSettingsPressed, 
   }) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (!showBackButton) return null;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 12.0), // 왼쪽에서 12만큼 떨어지게 설정
+      padding: const EdgeInsets.only(left: 12.0),
       child: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
         onPressed: onBack ?? () => Navigator.pop(context),
@@ -87,11 +89,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // AppBar의 오른쪽 영역 (알람 아이콘, 추가 버튼 등)
+  // AppBar의 오른쪽 영역 (알람 아이콘, 설정 아이콘, 추가 버튼 등)
   List<Widget> _buildActions() {
     final List<Widget> actions = [];
 
     if (type == AppBarType.main) {
+      // 메인 앱바 - 알람 아이콘
       actions.add(
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
@@ -101,7 +104,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       );
+    } else if (type == AppBarType.settings) {
+      // 설정 앱바 - 톱니바퀴 아이콘
+      actions.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: IconButton(
+            icon: const Icon(Icons.settings, color: Colors.black),
+            onPressed: onSettingsPressed ?? () {}, 
+          ),
+        ),
+      );
     } else if (type == AppBarType.subWithBtn && buttonText != null) {
+      // 🔹 버튼이 있는 서브 앱바
       actions.add(
         Padding(
           padding: const EdgeInsets.only(right: 16),
