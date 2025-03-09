@@ -1,5 +1,4 @@
 import 'package:artlog_app_mvp/ui/pages/archive/timeline_view.dart';
-// 새로 만든 calendar_view.dart 파일 경로에 맞춰 import
 import 'package:artlog_app_mvp/ui/pages/archive/calendar_view.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/record_badge.dart';
 import 'package:flutter/material.dart';
