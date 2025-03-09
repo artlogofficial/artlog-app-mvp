@@ -106,12 +106,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       );
     } else if (type == AppBarType.settings) {
-      // 설정 앱바 - 톱니바퀴 아이콘
+      // 설정 앱바 - 톱니바퀴 아이콘 (기존 종모양 아이콘을 변경)
       actions.add(
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black),
+            icon: const Icon(Icons.settings, color: Colors.black), // 변경된 부분
             onPressed: onSettingsPressed ?? () {}, // 설정 버튼 클릭 이벤트
           ),
         ),

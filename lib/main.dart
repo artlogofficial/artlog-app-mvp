@@ -2,6 +2,7 @@ import 'package:artlog_app_mvp/firebase_options.dart';
 import 'package:artlog_app_mvp/ui/pages/ex_search/ex_search_page.dart';
 import 'package:artlog_app_mvp/ui/pages/home/home_page.dart';
 import 'package:artlog_app_mvp/ui/pages/login/login_page.dart';
+import 'package:artlog_app_mvp/ui/pages/profile/profile_page.dart';
 import 'package:artlog_app_mvp/ui/pages/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,16 @@ class MainPage extends StatelessWidget {
                 );
               },
               child: const Text('홈화면'),
+            ),
+                        const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: const Text('프로필'),
             ),
           ],
         ),
