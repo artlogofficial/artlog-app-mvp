@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
           Center(
             child: ProfileAvatar(
               imageUrl: null, // 기본 프로필 아이콘 사용
-              isEditable: true, // 편집 버튼 활성화
+              editMode: true, // 편집 모드 활성화 (연필 아이콘 표시)
               onEdit: () {
                 print('프로필 편집 클릭됨');
               },

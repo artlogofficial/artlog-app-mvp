@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String? imageUrl;
-  final bool isEditable;
+  final bool editMode; // true: 연필 아이콘, false: 카메라 아이콘
   final VoidCallback? onEdit;
 
   const ProfileAvatar({
     Key? key,
     this.imageUrl,
-    this.isEditable = false,
+    this.editMode = false, // 기본값은 카메라 아이콘 (등록 모드)
     this.onEdit,
   }) : super(key: key);
 
@@ -17,36 +17,37 @@ class ProfileAvatar extends StatelessWidget {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        CircleAvatar(
-          radius: 36,
-          backgroundColor: Colors.grey[300],
-          backgroundImage: imageUrl != null
-              ? NetworkImage(imageUrl!)
-              : null, // 이미지가 없으면 기본 아이콘 표시
-          child: imageUrl == null
-              ? const Icon(Icons.account_circle, size: 72, color: Colors.grey)
-              : null,
+        ClipOval(
+          child: imageUrl != null
+              ? Image.network(
+                  imageUrl!,
+                  width: 72,
+                  height: 72,
+                  fit: BoxFit.cover,
+                ) 
+              : Image.asset(
+                  'assets/images/default_profile.png',
+                  width: 72,
+                  height: 72,
+                  fit: BoxFit.cover,
+                ),  // 기본 프로필 이미지
         ),
-        if (isEditable)
-          GestureDetector(
-            onTap: onEdit,
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 2,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.camera_alt, size: 16, color: Colors.black),
+        GestureDetector(
+          onTap: onEdit,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              editMode ? Icons.edit : Icons.camera_alt, // 편집: 연필, 등록: 카메라
+              size: 16,
+              color: const Color(0xFFB5B5B5), // 아이콘 색상 변경
             ),
           ),
+        ),
       ],
     );
   }
