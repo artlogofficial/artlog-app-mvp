@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // 앱바 타입을 정의하는 enum
-enum AppBarType { main, sub, subWithBtn, settings, none } // none 추가
+enum AppBarType { main, sub, subWithBtn, settings, none } 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? title; 
+  final String? title;
   final AppBarType type;
   final bool showBackButton;
   final VoidCallback? onBack;
@@ -31,9 +31,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: _buildLeading(context), // 왼쪽 아이콘 설정
-      leadingWidth: type == AppBarType.main ? 120 : 48, // 메인 앱바일 때 크기 조정
+      leadingWidth: type == AppBarType.main || type == AppBarType.settings ? 120 : 48, // 로고 크기 조정
       title: _buildTitle(), // 타이틀 설정
-      centerTitle: type != AppBarType.main, // 메인 앱바에서는 왼쪽 정렬
+      centerTitle: type != AppBarType.main && type != AppBarType.settings, // 메인, 설정 앱바에서는 왼쪽 정렬
       backgroundColor: Colors.transparent, // 투명 배경
       elevation: 0, // 그림자 제거
       actions: _buildActions(), // 오른쪽 아이콘 설정
@@ -46,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   // 왼쪽 영역 (로고 또는 뒤로 가기 버튼)
   Widget? _buildLeading(BuildContext context) {
-    if (type == AppBarType.main) {
+    if (type == AppBarType.main || type == AppBarType.settings) { // settings도 로고 표시
       return Padding(
         padding: const EdgeInsets.only(left: 16.0),
         child: SizedBox(
@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: kToolbarHeight,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: LogoWidget(size: 36), // 로고 위젯 표시
+            child: LogoWidget(size: 36), // 로고 표시
           ),
         ),
       );
@@ -71,9 +71,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // 타이틀 설정 (메인 앱바에서는 숨김)
+  // 타이틀 설정 (메인 및 설정 앱바에서는 숨김)
   Widget _buildTitle() {
-    if (title == null || type == AppBarType.main || type == AppBarType.none) {
+    if (title == null || type == AppBarType.main || type == AppBarType.settings || type == AppBarType.none) {
       return const SizedBox.shrink(); // 타이틀이 없을 경우 빈 위젯 반환
     }
 
@@ -106,12 +106,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       );
     } else if (type == AppBarType.settings) {
-      // 설정 앱바 - 톱니바퀴 아이콘 (기존 종모양 아이콘을 변경)
+      // 설정 앱바 - 톱니바퀴 아이콘
       actions.add(
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black), // 변경된 부분
+            icon: const Icon(Icons.settings, color: Colors.black), // 종모양 대신 톱니바퀴 아이콘 표시
             onPressed: onSettingsPressed ?? () {}, // 설정 버튼 클릭 이벤트
           ),
         ),
