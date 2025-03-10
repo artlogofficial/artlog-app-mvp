@@ -1,4 +1,5 @@
 import 'package:artlog_app_mvp/ui/widgets/appbars/custom_appbar.dart';
+import 'package:artlog_app_mvp/ui/widgets/cards/poster_card.dart';
 import 'package:artlog_app_mvp/ui/widgets/common/profile_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,12 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
+
+          // 프로필 영역과 PosterCard 사이 간격 추가
+          const SizedBox(height: 24),
+
+          // PosterCard 추가
+          const PosterCard(recordCount: 2), // 기록 개수는 동적으로 변경 가능
         ],
       ),
     );
